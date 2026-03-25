@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Company – Customer Loyalty SUPLINE</title>
+  <link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+
+<!-- ===================== LOGIN SCREEN ===================== -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon">🛡️</div>
+      <div class="company-name">Test Company</div>
+      <div class="dept-name">Customer Loyalty · SUPLINE</div>
+    </div>
+    <div class="login-title">Welcome Back</div>
+    <div class="login-subtitle">Sign in to your workspace</div>
+
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="loginEmail" placeholder="you@testcompany.com" value="agent.smith@testcompany.com" />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" value="••••••••" />
+    </div>
+
+    <div class="form-group">
+      <label>Select Role</label>
+      <div class="role-selector">
+        <div class="role-option active" id="roleUser" onclick="selectRole('user')">
+          <div class="role-icon">👤</div>
+          <div class="role-label">Agent / User</div>
+        </div>
+        <div class="role-option" id="roleAdmin" onclick="selectRole('admin')">
+          <div class="role-icon">🔑</div>
+          <div class="role-label">Administrator</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="doLogin()">Sign In to SUPLINE</button>
+
+    <div style="text-align:center; margin-top:16px; font-size:12px; color:#9ca3af;">
+      🔒 Secured · Connected to Salesforce & Microsoft Teams
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MAIN APP ===================== -->
+<div id="appScreen">
+  <div class="app-layout">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="topbar-brand">
+        <div class="topbar-logo">🛡️</div>
+        <div class="topbar-brand-text">
+          <div class="brand-name">Test Company</div>
+          <div class="brand-dept">SUPLINE Portal</div>
+        </div>
+      </div>
+
+      <div class="topbar-search">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search cases, customers, escalations..." id="globalSearch" oninput="handleSearch(this.value)" onblur="closeSearchDelay()" />
+        <div class="search-dropdown" id="searchDropdown"></div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="topbar-btn" title="Teams Notifications" onclick="showPage('calendar')">
+          <span>💬</span>
+          <span class="badge">3</span>
+        </button>
+        <button class="topbar-btn" title="Notifications" onclick="showToast('You have 5 new follow-up reminders','warning')">
+          <span>🔔</span>
+          <span class="badge">5</span>
+        </button>
+        <div style="width:1px; height:24px; background:rgba(255,255,255,0.2); margin:0 4px;"></div>
+        <div class="user-info-topbar" id="userInfoBar">
+          <div class="user-name" id="topbarName">Agent Smith</div>
+          <div class="user-role" id="topbarRole">Agent</div>
+        </div>
+        <div class="user-avatar" id="userAvatarTop" onclick="showPage('profile')">AS</div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar">
+      <div class="nav-section-title">Main Menu</div>
+
+      <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+        <span class="nav-icon">🏠</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="showPage('cases')" id="nav-cases">
+        <span class="nav-icon">📋</span> My Cases
+        <span class="nav-badge">12</span>
+      </div>
+      <div class="nav-item" onclick="showPage('escalations')" id="nav-escalations">
+        <span class="nav-icon">⚠️</span> Escalations
+        <span class="nav-badge red">4</span>
+      </div>
+      <div class="nav-item" onclick="showPage('services')" id="nav-services">
+        <span class="nav-icon">🔧</span> Service Orders
+        <span class="nav-badge orange">7</span>
+      </div>
+      <div class="nav-item" onclick="showPage('followups')" id="nav-followups">
+        <span class="nav-icon">📞</span> Follow-Ups
+        <span class="nav-badge">9</span>
+      </div>
+
+      <div class="sidebar-divider"></div>
+      <div class="nav-section-title">Planning</div>
+
+      <div class="nav-item" onclick="showPage('calendar')" id="nav-calendar">
+        <span class="nav-icon">📅</span> Calendar & Reminders
+      </div>
+      <div class="nav-item" onclick="showPage('customers')" id="nav-customers">
+        <span class="nav-icon">☁️</span> Salesforce Contacts
+      </div>
+
+      <div class="sidebar-divider"></div>
+      <div class="nav-section-title" id="adminSectionTitle" style="display:none">Admin Tools</div>
+
+      <div class="nav-item" onclick="showPage('admin')" id="nav-admin" style="display:none">
+        <span class="nav-icon">👥</span> Team Overview
+      </div>
+      <div class="nav-item" onclick="showPage('allcalendars')" id="nav-allcalendars" style="display:none">
+        <span class="nav-icon">📆</span> All Calendars
+      </div>
+      <div class="nav-item" onclick="showPage('reports')" id="nav-reports" style="display:none">
+        <span class="nav-icon">📊</span> Reports
+      </div>
+
+      <div class="sidebar-divider"></div>
+      <div class="nav-item" onclick="showPage('profile')" id="nav-profile">
+        <span class="nav-icon">⚙️</span> Settings
+      </div>
+      <div class="nav-item" onclick="doLogout()">
+        <span class="nav-icon">🚪</span> Sign Out
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+
+      <!-- ========== DASHBOARD ========== -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div>
+            <div class="page-title" id="dashGreeting">Good morning, Agent Smith 👋</div>
+            <div class="page-subtitle">Here's your SUPLINE overview for today</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-outline" onclick="openModal('newCase')">+ New Case</button>
+            <button class="btn btn-accent" onclick="openModal('newFollowup')">+ Follow-Up</button>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card blue" onclick="showCardDetail('openCases')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">Open Cases</div>
+              </div>
+              <div class="stat-icon blue">📋</div>
+            </div>
+            <div class="stat-change up">↑ 2 new today</div>
+          </div>
+          <div class="stat-card red" onclick="showCardDetail('escalations')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div>
+                <div class="stat-value">4</div>
+                <div class="stat-label">Escalations</div>
+              </div>
+              <div class="stat-icon red">⚠️</div>
+            </div>
+            <div class="stat-change down">↑ 1 since yesterday</div>
+          </div>
+          <div class="stat-card orange" onclick="showCardDetail('followupsDue')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div>
+                <div class="stat-value">9</div>
+                <div class="stat-label">Follow-Ups Due</div>
+              </div>
+              <div class="stat-icon orange">📞</div>
+            </div>
+            <div class="stat-change down">3 overdue</div>
+          </div>
+          <div class="stat-card teal" onclick="showCardDetail('serviceOrders')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div>
+                <div class="stat-value">7</div>
+                <div class="stat-label">Service Orders</div>
+              </div>
+              <div class="stat-icon teal">🔧</div>
+            </div>
+            <div class="stat-change up">↑ 5 in progress</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <!-- Recent Cases -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📋 Recent Cases</span>
+              <button class="btn btn-ghost btn-sm" onclick="showPage('cases')">View All</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Case #</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr onclick="openCaseDetail('CA-0000423891')">
+                    <td><span class="case-badge ca">CA-0000423891</span></td>
+                    <td>Maria Gonzalez</td>
+                    <td><span class="status-badge open">Open</span></td>
+                    <td><span class="priority-badge high">High</span></td>
+                  </tr>
+                  <tr onclick="openCaseDetail('CA-0000423742')">
+                    <td><span class="case-badge ca">CA-0000423742</span></td>
+                    <td>James Thornton</td>
+                    <td><span class="status-badge pending">Pending</span></td>
+                    <td><span class="priority-badge medium">Medium</span></td>
+                  </tr>
+                  <tr onclick="openCaseDetail('CA-0000423601')">
+                    <td><span class="case-badge ca">CA-0000423601</span></td>
+                    <td>Patricia Lam</td>
+                    <td><span class="status-badge escalated">Escalated</span></td>
+                    <td><span class="priority-badge high">High</span></td>
+                  </tr>
+                  <tr onclick="openCaseDetail('CA-0000423455')">
+                    <td><span class="case-badge ca">CA-0000423455</span></td>
+                    <td>Robert Kim</td>
+                    <td><span class="status-badge resolved">Resolved</span></td>
+                    <td><span class="priority-badge low">Low</span></td>
+                  </tr>
+                  <tr onclick="openCaseDetail('CA-0000423301')">
+                    <td><span class="case-badge ca">CA-0000423301</span></td>
+                    <td>Sandra Okafor</td>
+                    <td><span class="status-badge open">Open</span></td>
+                    <td><span class="priority-badge medium">Medium</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Activity Feed -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">⚡ Recent Activity</span>
+              <span style="font-size:12px; color:var(--text-secondary);">Live</span>
+            </div>
+            <div class="card-body" style="padding-top:8px;">
+              <div class="activity-item">
+                <div class="activity-dot purple"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>ESC-000009832</strong> escalated by Maria Gonzalez — Billing dispute unresolved</div>
+                  <div class="activity-time">8 minutes ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot blue"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>CA-0000423742</strong> updated — Notes added by Agent Lisa Park</div>
+                  <div class="activity-time">22 minutes ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot green"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>S-184</strong> service order completed — Installation confirmed</div>
+                  <div class="activity-time">45 minutes ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot orange"></div>
+                <div class="activity-content">
+                  <div class="activity-text">Follow-up reminder: <strong>James Thornton</strong> – call back due in 30 minutes</div>
+                  <div class="activity-time">1 hour ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot blue"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>CA-0000423455</strong> resolved by Agent Mike Davis</div>
+                  <div class="activity-time">2 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot red"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>ESC-000009791</strong> — SLA breach warning: Response overdue</div>
+                  <div class="activity-time">3 hours ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teams Reminders + Today's Follow-Ups -->
+        <div class="two-col">
+          <!-- Teams Integration Panel -->
+          <div class="teams-panel">
+            <div class="teams-header">
+              <div class="teams-logo">🟪</div>
+              <div>
+                <div class="teams-title">Microsoft Teams Reminders</div>
+                <div class="teams-subtitle">3 upcoming reminders synced</div>
+              </div>
+              <button class="btn btn-sm" style="background:rgba(255,255,255,0.2); color:white; margin-left:auto; border:none;" onclick="openModal('newReminder')">+ Add</button>
+            </div>
+            <div class="teams-reminder" onclick="showToast('Opening Teams meeting for ESC-000009832','success')">
+              <div class="teams-reminder-icon">⚠️</div>
+              <div class="teams-reminder-text">
+                <div class="teams-reminder-title">ESC-000009832 – Escalation Review</div>
+                <div class="teams-reminder-time">Today · 2:00 PM · Teams Meeting</div>
+              </div>
+              <div class="teams-reminder-action">Join</div>
+            </div>
+            <div class="teams-reminder" onclick="showToast('Opening Teams call for CA-0000423891','success')">
+              <div class="teams-reminder-icon">📞</div>
+              <div class="teams-reminder-text">
+                <div class="teams-reminder-title">Follow-Up: Maria Gonzalez</div>
+                <div class="teams-reminder-time">Today · 3:30 PM · Phone Call</div>
+              </div>
+              <div class="teams-reminder-action">Call</div>
+            </div>
+            <div class="teams-reminder" onclick="showToast('Opening Teams calendar','success')">
+              <div class="teams-reminder-icon">📅</div>
+              <div class="teams-reminder-text">
+                <div class="teams-reminder-title">Weekly Loyalty Team Sync</div>
+                <div class="teams-reminder-time">Tomorrow · 9:00 AM · Channel Meeting</div>
+              </div>
+              <div class="teams-reminder-action">RSVP</div>
+            </div>
+          </div>
+
+          <!-- Today's Follow-Ups -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📞 Today's Follow-Ups</span>
+              <button class="btn btn-ghost btn-sm" onclick="showPage('followups')">View All</button>
+            </div>
+            <div class="card-body" style="padding-top:8px;">
+              <div class="activity-item">
+                <div class="activity-dot red"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>Maria Gonzalez</strong> — <span class="case-badge ca" style="font-size:11px;padding:2px 6px;">CA-0000423891</span></div>
+                  <div class="activity-time">⏰ Overdue · Was due 10:00 AM</div>
+                </div>
+                <button class="btn btn-sm btn-accent" onclick="showToast('Follow-up marked complete for Maria Gonzalez','success')" style="margin-left:auto">Done</button>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot orange"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>James Thornton</strong> — <span class="case-badge ca" style="font-size:11px;padding:2px 6px;">CA-0000423742</span></div>
+                  <div class="activity-time">Due: 3:30 PM today</div>
+                </div>
+                <button class="btn btn-sm btn-accent" onclick="showToast('Follow-up marked complete for James Thornton','success')" style="margin-left:auto">Done</button>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot blue"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>Patricia Lam</strong> — <span class="case-badge esc" style="font-size:11px;padding:2px 6px;">ESC-000009832</span></div>
+                  <div class="activity-time">Due: 4:00 PM today</div>
+                </div>
+                <button class="btn btn-sm btn-accent" onclick="showToast('Follow-up marked complete for Patricia Lam','success')" style="margin-left:auto">Done</button>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot blue"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>Robert Kim</strong> — <span class="case-badge srv" style="font-size:11px;padding:2px 6px;">S-184</span></div>
+                  <div class="activity-time">Due: 5:00 PM today</div>
+                </div>
+                <button class="btn btn-sm btn-accent" onclick="showToast('Follow-up marked complete for Robert Kim','success')" style="margin-left:auto">Done</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== CASES PAGE ========== -->
+      <div class="page" id="page-cases">
+        <div class="page-header">
+          <div>
+            <div class="page-title">📋 Case Management</div>
+            <div class="page-subtitle">Track and manage all customer cases</div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <select class="btn btn-ghost btn-sm" style="cursor:pointer;" onchange="filterCases(this.value)">
+              <option value="all">All Statuses</option>
+              <option value="open">Open</option>
+              <option value="pending">Pending</option>
+              <option value="escalated">Escalated</option>
+              <option value="resolved">Resolved</option>
+            </select>
+            <button class="btn btn-accent" onclick="openModal('newCase')">+ New Case</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">All Cases</span>
+            <span style="font-size:12px; color:var(--text-secondary);" id="caseCount">Showing 10 cases</span>
+          </div>
+          <div class="table-wrap">
+            <table id="casesTable">
+              <thead>
+                <tr>
+                  <th>Case Number</th>
+                  <th>Customer</th>
+                  <th>Subject</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th>Assigned To</th>
+                  <th>Last Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="casesTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== ESCALATIONS PAGE ========== -->
+      <div class="page" id="page-escalations">
+        <div class="page-header">
+          <div>
+            <div class="page-title">⚠️ Escalation Management</div>
+            <div class="page-subtitle">Monitor and resolve escalated customer issues</div>
+          </div>
+          <button class="btn btn-accent" onclick="openModal('newEscalation')">+ New Escalation</button>
+        </div>
+
+        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card red" onclick="showCardDetail('activeEscalations')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div><div class="stat-value">4</div><div class="stat-label">Active Escalations</div></div>
+              <div class="stat-icon red">🔴</div>
+            </div>
+          </div>
+          <div class="stat-card orange" onclick="showCardDetail('slaBreachRisk')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div><div class="stat-value">2</div><div class="stat-label">SLA Breach Risk</div></div>
+              <div class="stat-icon orange">⏱️</div>
+            </div>
+          </div>
+          <div class="stat-card green" onclick="showCardDetail('resolvedMonth')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div><div class="stat-value">8</div><div class="stat-label">Resolved This Month</div></div>
+              <div class="stat-icon green">✅</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Active Escalations</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ESC Number</th>
+                  <th>Linked Case</th>
+                  <th>Customer</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                  <th>SLA Deadline</th>
+                  <th>Owner</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="case-badge esc">ESC-000009832</span></td>
+                  <td><span class="case-badge ca">CA-0000423891</span></td>
+                  <td>Maria Gonzalez</td>
+                  <td>Billing dispute unresolved >14 days</td>
+                  <td><span class="status-badge overdue">Overdue</span></td>
+                  <td style="color:var(--danger);font-weight:600;">⚠️ Yesterday</td>
+                  <td>Agent Smith</td>
+                  <td>
+                    <button class="btn btn-sm btn-accent" onclick="showToast('Escalation ESC-000009832 updated','success')">Update</button>
+                    <button class="btn btn-sm btn-outline" onclick="openModal('newReminder')">⏰ Remind</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge esc">ESC-000009791</span></td>
+                  <td><span class="case-badge ca">CA-0000423601</span></td>
+                  <td>Patricia Lam</td>
+                  <td>Service cancellation – retention failure</td>
+                  <td><span class="status-badge escalated">Escalated</span></td>
+                  <td style="color:var(--warning);font-weight:600;">Today 5:00 PM</td>
+                  <td>Agent Lisa Park</td>
+                  <td>
+                    <button class="btn btn-sm btn-accent" onclick="showToast('Escalation ESC-000009791 updated','success')">Update</button>
+                    <button class="btn btn-sm btn-outline" onclick="openModal('newReminder')">⏰ Remind</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge esc">ESC-000009745</span></td>
+                  <td><span class="case-badge ca">CA-0000422998</span></td>
+                  <td>Derek Osei</td>
+                  <td>Multiple failed resolutions – exec complaint</td>
+                  <td><span class="status-badge escalated">Escalated</span></td>
+                  <td>Tomorrow 12:00 PM</td>
+                  <td>Agent Mike Davis</td>
+                  <td>
+                    <button class="btn btn-sm btn-accent" onclick="showToast('Escalation ESC-000009745 updated','success')">Update</button>
+                    <button class="btn btn-sm btn-outline" onclick="openModal('newReminder')">⏰ Remind</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge esc">ESC-000009720</span></td>
+                  <td><span class="case-badge ca">CA-0000422801</span></td>
+                  <td>Helen Vargas</td>
+                  <td>Refund request denied – legal threat</td>
+                  <td><span class="status-badge pending">Pending</span></td>
+                  <td>Jun 28, 2025</td>
+                  <td>Agent Smith</td>
+                  <td>
+                    <button class="btn btn-sm btn-accent" onclick="showToast('Escalation ESC-000009720 updated','success')">Update</button>
+                    <button class="btn btn-sm btn-outline" onclick="openModal('newReminder')">⏰ Remind</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== SERVICE ORDERS PAGE ========== -->
+      <div class="page" id="page-services">
+        <div class="page-header">
+          <div>
+            <div class="page-title">🔧 Service Orders</div>
+            <div class="page-subtitle">Track all service requests and installations</div>
+          </div>
+          <button class="btn btn-accent" onclick="openModal('newService')">+ New Service Order</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Active Service Orders</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Service #</th>
+                  <th>Linked Case</th>
+                  <th>Customer</th>
+                  <th>Service Type</th>
+                  <th>Status</th>
+                  <th>Scheduled</th>
+                  <th>Technician</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="case-badge srv">S-201</span></td>
+                  <td><span class="case-badge ca">CA-0000423891</span></td>
+                  <td>Maria Gonzalez</td>
+                  <td>Equipment Replacement</td>
+                  <td><span class="status-badge open">Scheduled</span></td>
+                  <td>Jun 24, 2025</td>
+                  <td>Tech Team A</td>
+                  <td>
+                    <button class="btn btn-sm btn-accent" onclick="showToast('Service order S-201 updated','success')">Update</button>
+                    <button class="btn btn-sm btn-outline" onclick="openModal('newReminder')">⏰ Remind</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge srv">S-198</span></td>
+                  <td><span class="case-badge ca">CA-0000423455</span></td>
+                  <td>Robert Kim</td>
+                  <td>Installation</td>
+                  <td><span class="status-badge pending">In Progress</span></td>
+                  <td>Jun 22, 2025</td>
+                  <td>Tech Team B</td>
+                  <td>
+                    <button class="btn btn-sm btn-accent" onclick="showToast('Service order S-198 updated','success')">Update</button>
+                    <button class="btn btn-sm btn-outline" onclick="openModal('newReminder')">⏰ Remind</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge srv">S-195</span></td>
+                  <td><span class="case-badge ca">CA-0000423301</span></td>
+                  <td>Sandra Okafor</td>
+                  <td>Repair</td>
+                  <td><span class="status-badge escalated">Delayed</span></td>
+                  <td>Jun 20, 2025</td>
+                  <td>Tech Team A</td>
+                  <td>
+                    <button class="btn btn-sm btn-accent" onclick="showToast('Service order S-195 updated','success')">Update</button>
+                    <button class="btn btn-sm btn-outline" onclick="openModal('newReminder')">⏰ Remind</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge srv">S-191</span></td>
+                  <td><span class="case-badge esc">ESC-000009745</span></td>
+                  <td>Derek Osei</td>
+                  <td>Diagnostic</td>
+                  <td><span class="status-badge open">Scheduled</span></td>
+                  <td>Jun 25, 2025</td>
+                  <td>Tech Team C</td>
+                  <td>
+                    <button class="btn btn-sm btn-accent" onclick="showToast('Service order S-191 updated','success')">Update</button>
+                    <button class="btn btn-sm btn-outline" onclick="openModal('newReminder')">⏰ Remind</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge srv">S-187</span></td>
+                  <td><span class="case-badge ca">CA-0000422801</span></td>
+                  <td>Helen Vargas</td>
+                  <td>Network Setup</td>
+                  <td><span class="status-badge pending">Awaiting Parts</span></td>
+                  <td>Jun 27, 2025</td>
+                  <td>Tech Team B</td>
+                  <td>
+                    <button class="btn btn-sm btn-accent" onclick="showToast('Service order S-187 updated','success')">Update</button>
+                    <button class="btn btn-sm btn-outline" onclick="openModal('newReminder')">⏰ Remind</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge srv">S-184</span></td>
+                  <td><span class="case-badge ca">CA-0000423455</span></td>
+                  <td>Robert Kim</td>
+                  <td>Installation</td>
+                  <td><span class="status-badge resolved">Completed</span></td>
+                  <td>Jun 21, 2025</td>
+                  <td>Tech Team A</td>
+                  <td>
+                    <button class="btn btn-sm btn-ghost" onclick="showToast('Service order S-184 is already completed','warning')">View</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== FOLLOW-UPS PAGE ========== -->
+      <div class="page" id="page-followups">
+        <div class="page-header">
+          <div>
+            <div class="page-title">📞 Follow-Up Manager</div>
+            <div class="page-subtitle">Manage all customer follow-up tasks and reminders</div>
+          </div>
+          <button class="btn btn-accent" onclick="openModal('newFollowup')">+ New Follow-Up</button>
+        </div>
+
+        <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="stat-card red" onclick="showCardDetail('overdue')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div><div class="stat-value">3</div><div class="stat-label">Overdue</div></div>
+              <div class="stat-icon red">⏰</div>
+            </div>
+          </div>
+          <div class="stat-card orange" onclick="showCardDetail('dueToday')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div><div class="stat-value">4</div><div class="stat-label">Due Today</div></div>
+              <div class="stat-icon orange">📅</div>
+            </div>
+          </div>
+          <div class="stat-card blue" onclick="showCardDetail('thisWeek')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div><div class="stat-value">9</div><div class="stat-label">This Week</div></div>
+              <div class="stat-icon blue">📋</div>
+            </div>
+          </div>
+          <div class="stat-card green" onclick="showCardDetail('completedMonth')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div><div class="stat-value">24</div><div class="stat-label">Completed This Month</div></div>
+              <div class="stat-icon green">✅</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">All Follow-Ups</span>
+            <div style="display:flex;gap:8px;">
+              <select class="btn btn-ghost btn-sm" style="cursor:pointer;">
+                <option>All Types</option>
+                <option>Phone Call</option>
+                <option>Email</option>
+                <option>Teams Meeting</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Case/ESC/Service</th>
+                  <th>Type</th>
+                  <th>Due Date/Time</th>
+                  <th>Status</th>
+                  <th>Notes</th>
+                  <th>Teams Reminder</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Maria Gonzalez</strong></td>
+                  <td><span class="case-badge ca">CA-0000423891</span> <span class="case-badge esc">ESC-000009832</span></td>
+                  <td>📞 Phone Call</td>
+                  <td style="color:var(--danger);font-weight:600;">⚠️ Overdue</td>
+                  <td><span class="status-badge overdue">Overdue</span></td>
+                  <td>Billing dispute – offer retention package</td>
+                  <td><span class="teams-connected">🟪 Synced</span></td>
+                  <td><button class="btn btn-sm btn-accent" onclick="showToast('Follow-up completed for Maria Gonzalez','success')">Complete</button></td>
+                </tr>
+                <tr>
+                  <td><strong>James Thornton</strong></td>
+                  <td><span class="case-badge ca">CA-0000423742</span></td>
+                  <td>📧 Email</td>
+                  <td>Today 3:30 PM</td>
+                  <td><span class="status-badge pending">Pending</span></td>
+                  <td>Send resolution summary</td>
+                  <td><span class="teams-connected">🟪 Synced</span></td>
+                  <td><button class="btn btn-sm btn-accent" onclick="showToast('Follow-up completed for James Thornton','success')">Complete</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Patricia Lam</strong></td>
+                  <td><span class="case-badge esc">ESC-000009791</span></td>
+                  <td>🎥 Teams Meeting</td>
+                  <td>Today 4:00 PM</td>
+                  <td><span class="status-badge open">Scheduled</span></td>
+                  <td>Retention review – escalation decision</td>
+                  <td><span class="teams-connected">🟪 Synced</span></td>
+                  <td><button class="btn btn-sm btn-accent" onclick="showToast('Follow-up completed for Patricia Lam','success')">Complete</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Robert Kim</strong></td>
+                  <td><span class="case-badge srv">S-184</span></td>
+                  <td>📞 Phone Call</td>
+                  <td>Today 5:00 PM</td>
+                  <td><span class="status-badge open">Open</span></td>
+                  <td>Confirm installation satisfaction</td>
+                  <td><span class="teams-connected">🟪 Synced</span></td>
+                  <td><button class="btn btn-sm btn-accent" onclick="showToast('Follow-up completed for Robert Kim','success')">Complete</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Sandra Okafor</strong></td>
+                  <td><span class="case-badge ca">CA-0000423301</span></td>
+                  <td>📧 Email</td>
+                  <td>Jun 24, 2025</td>
+                  <td><span class="status-badge open">Open</span></td>
+                  <td>Repair status update</td>
+                  <td><span style="color:var(--text-secondary);font-size:12px;">Not set</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-outline" onclick="openModal('newReminder')">⏰ Set Reminder</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Derek Osei</strong></td>
+                  <td><span class="case-badge esc">ESC-000009745</span></td>
+                  <td>🎥 Teams Meeting</td>
+                  <td>Jun 25, 2025</td>
+                  <td><span class="status-badge open">Open</span></td>
+                  <td>Exec review meeting – management present</td>
+                  <td><span class="teams-connected">🟪 Synced</span></td>
+                  <td><button class="btn btn-sm btn-accent" onclick="showToast('Follow-up completed for Derek Osei','success')">Complete</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== CALENDAR PAGE ========== -->
+      <div class="page" id="page-calendar">
+        <div class="page-header">
+          <div>
+            <div class="page-title">📅 Calendar & Reminders</div>
+            <div class="page-subtitle">Synced with Microsoft Teams</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="teams-connected" style="font-size:13px;">🟪 Microsoft Teams Connected</span>
+            <button class="btn btn-accent" onclick="openModal('newReminder')">+ Add Reminder</button>
+          </div>
+        </div>
+
+        <!-- Teams upcoming meetings -->
+        <div class="teams-panel" style="background:linear-gradient(135deg,#464eb8,#6264a7)">
+          <div class="teams-header">
+            <div class="teams-logo">🟪</div>
+            <div>
+              <div class="teams-title">Microsoft Teams – Upcoming Meetings</div>
+              <div class="teams-subtitle">Automatically synced with your Teams calendar</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+            <div class="teams-reminder">
+              <div class="teams-reminder-icon">⚠️</div>
+              <div class="teams-reminder-text">
+                <div class="teams-reminder-title">ESC Review – ESC-000009832</div>
+                <div class="teams-reminder-time">Today · 2:00 PM</div>
+              </div>
+            </div>
+            <div class="teams-reminder">
+              <div class="teams-reminder-icon">📞</div>
+              <div class="teams-reminder-text">
+                <div class="teams-reminder-title">Follow-Up: Maria Gonzalez</div>
+                <div class="teams-reminder-time">Today · 3:30 PM</div>
+              </div>
+            </div>
+            <div class="teams-reminder">
+              <div class="teams-reminder-icon">👥</div>
+              <div class="teams-reminder-text">
+                <div class="teams-reminder-title">Weekly Loyalty Team Sync</div>
+                <div class="teams-reminder-time">Tomorrow · 9:00 AM</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="card">
+          <div class="card-header">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <button class="btn btn-ghost btn-sm" onclick="changeMonth(-1)">◀</button>
+              <span class="card-title" id="calMonthTitle">June 2025</span>
+              <button class="btn btn-ghost btn-sm" onclick="changeMonth(1)">▶</button>
+            </div>
+            <div style="display:flex;gap:8px;font-size:12px;">
+              <span style="display:flex;align-items:center;gap:4px;"><span style="background:#e3f2fd;color:#0078d4;padding:2px 6px;border-radius:3px;font-weight:600;">Follow-Up</span></span>
+              <span style="display:flex;align-items:center;gap:4px;"><span style="background:#f3e5f5;color:#8b2fc9;padding:2px 6px;border-radius:3px;font-weight:600;">Escalation</span></span>
+              <span style="display:flex;align-items:center;gap:4px;"><span style="background:#e8f5e9;color:#107c10;padding:2px 6px;border-radius:3px;font-weight:600;">Meeting</span></span>
+              <span style="display:flex;align-items:center;gap:4px;"><span style="background:#ffebee;color:#d13438;padding:2px 6px;border-radius:3px;font-weight:600;">Deadline</span></span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="calendar-grid" id="calGrid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== SALESFORCE CONTACTS PAGE ========== -->
+      <div class="page" id="page-customers">
+        <div class="page-header">
+          <div>
+            <div class="page-title">☁️ Salesforce Contacts</div>
+            <div class="page-subtitle">Customer records synced from Salesforce CRM</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="sf-connected">☁️ Salesforce Connected</span>
+            <button class="btn btn-accent" onclick="showToast('Syncing with Salesforce...','success')">↻ Sync Now</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Customer Records</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer Name</th>
+                  <th>SF Account ID</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Active Cases</th>
+                  <th>Panel Type</th>
+                  <th>Last Contact</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0078d4,#50b3f0);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:12px;">MG</div><strong>Maria Gonzalez</strong></div></td>
+                  <td style="font-family:monospace;font-size:12px;">SF-001243891</td>
+                  <td>m.gonzalez@email.com</td>
+                  <td>(555) 234-5678</td>
+                  <td><span class="case-badge ca">CA-0000423891</span><br><span class="case-badge esc">ESC-000009832</span></td>
+                  <td><span class="tag teal">Residential Plus</span></td>
+                  <td>Today</td>
+                  <td><button class="btn btn-sm btn-accent" onclick="openModal('newFollowup')">Follow-Up</button></td>
+                </tr>
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#8b2fc9,#b060ff);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:12px;">JT</div><strong>James Thornton</strong></div></td>
+                  <td style="font-family:monospace;font-size:12px;">SF-001243742</td>
+                  <td>j.thornton@email.com</td>
+                  <td>(555) 345-6789</td>
+                  <td><span class="case-badge ca">CA-0000423742</span></td>
+                  <td><span class="tag blue">Business Pro</span></td>
+                  <td>Yesterday</td>
+                  <td><button class="btn btn-sm btn-accent" onclick="openModal('newFollowup')">Follow-Up</button></td>
+                </tr>
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#038387,#00c4c9);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:12px;">PL</div><strong>Patricia Lam</strong></div></td>
+                  <td style="font-family:monospace;font-size:12px;">SF-001243601</td>
+                  <td>p.lam@email.com</td>
+                  <td>(555) 456-7890</td>
+                  <td><span class="case-badge esc">ESC-000009791</span></td>
+                  <td><span class="tag teal">Residential Plus</span></td>
+                  <td>2 days ago</td>
+                  <td><button class="btn btn-sm btn-accent" onclick="openModal('newFollowup')">Follow-Up</button></td>
+                </tr>
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#107c10,#50c050);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:12px;">RK</div><strong>Robert Kim</strong></div></td>
+                  <td style="font-family:monospace;font-size:12px;">SF-001243455</td>
+                  <td>r.kim@email.com</td>
+                  <td>(555) 567-8901</td>
+                  <td><span class="case-badge srv">S-184</span></td>
+                  <td><span class="tag">Standard</span></td>
+                  <td>Today</td>
+                  <td><button class="btn btn-sm btn-accent" onclick="openModal('newFollowup')">Follow-Up</button></td>
+                </tr>
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#d13438,#ff6b6e);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:12px;">SO</div><strong>Sandra Okafor</strong></div></td>
+                  <td style="font-family:monospace;font-size:12px;">SF-001243301</td>
+                  <td>s.okafor@email.com</td>
+                  <td>(555) 678-9012</td>
+                  <td><span class="case-badge ca">CA-0000423301</span><br><span class="case-badge srv">S-195</span></td>
+                  <td><span class="tag blue">Business Pro</span></td>
+                  <td>3 days ago</td>
+                  <td><button class="btn btn-sm btn-accent" onclick="openModal('newFollowup')">Follow-Up</button></td>
+                </tr>
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#ff8c00,#ffc040);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:12px;">DO</div><strong>Derek Osei</strong></div></td>
+                  <td style="font-family:monospace;font-size:12px;">SF-001242998</td>
+                  <td>d.osei@email.com</td>
+                  <td>(555) 789-0123</td>
+                  <td><span class="case-badge esc">ESC-000009745</span><br><span class="case-badge srv">S-191</span></td>
+                  <td><span class="tag purple">Enterprise</span></td>
+                  <td>4 days ago</td>
+                  <td><button class="btn btn-sm btn-accent" onclick="openModal('newFollowup')">Follow-Up</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== ADMIN – TEAM OVERVIEW ========== -->
+      <div class="page" id="page-admin">
+        <div class="page-header">
+          <div>
+            <div class="page-title">👥 Team Overview <span style="font-size:14px;background:#ffebee;color:#d13438;padding:3px 10px;border-radius:20px;margin-left:8px;font-weight:600;">Admin Only</span></div>
+            <div class="page-subtitle">View all agents' workloads and performance — Customer Loyalty SUPLINE</div>
+          </div>
+          <button class="btn btn-accent" onclick="showPage('allcalendars')">📆 View All Calendars</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card blue" onclick="showCardDetail('activeAgents')" style="cursor:pointer;">
+            <div class="stat-top"><div><div class="stat-value" id="totalAgents">18</div><div class="stat-label">Active Agents</div></div><div class="stat-icon blue">👥</div></div>
+          </div>
+          <div class="stat-card orange" onclick="showCardDetail('teamOpenCases')" style="cursor:pointer;">
+            <div class="stat-top"><div><div class="stat-value">47</div><div class="stat-label">Open Cases (Team)</div></div><div class="stat-icon orange">📋</div></div>
+          </div>
+          <div class="stat-card red" onclick="showCardDetail('teamEscalations')" style="cursor:pointer;">
+            <div class="stat-top"><div><div class="stat-value">9</div><div class="stat-label">Active Escalations</div></div><div class="stat-icon red">⚠️</div></div>
+          </div>
+          <div class="stat-card green" onclick="showCardDetail('slaCompliance')" style="cursor:pointer;">
+            <div class="stat-top"><div><div class="stat-value">89%</div><div class="stat-label">SLA Compliance</div></div><div class="stat-icon green">✅</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Agent Workload Overview</span>
+            <div style="display:flex;gap:8px;">
+              <select class="btn btn-ghost btn-sm" style="cursor:pointer;">
+                <option>All Departments</option>
+                <option>Customer Loyalty SUPLINE</option>
+                <option>Retention Team</option>
+                <option>Technical Support</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body" style="padding-top:8px;" id="agentList">
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== ADMIN – ALL CALENDARS ========== -->
+      <div class="page" id="page-allcalendars">
+        <div class="page-header">
+          <div>
+            <div class="page-title">📆 All Team Calendars <span style="font-size:14px;background:#ffebee;color:#d13438;padding:3px 10px;border-radius:20px;margin-left:8px;font-weight:600;">Admin Only</span></div>
+            <div class="page-subtitle">View and manage all agents' calendars and reminders</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="teams-connected">🟪 All Teams Calendars Synced</span>
+          </div>
+        </div>
+
+        <div id="allCalendarsContainer" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        </div>
+      </div>
+
+      <!-- ========== REPORTS PAGE ========== -->
+      <div class="page" id="page-reports">
+        <div class="page-header">
+          <div>
+            <div class="page-title">📊 Reports & Analytics <span style="font-size:14px;background:#ffebee;color:#d13438;padding:3px 10px;border-radius:20px;margin-left:8px;font-weight:600;">Admin Only</span></div>
+            <div class="page-subtitle">Team performance metrics for Customer Loyalty SUPLINE</div>
+          </div>
+          <button class="btn btn-outline" onclick="showToast('Exporting report to PDF...','success')">⬇ Export PDF</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card green" onclick="showCardDetail('firstCallResolution')" style="cursor:pointer;">
+            <div class="stat-top"><div><div class="stat-value">92%</div><div class="stat-label">First Call Resolution</div></div><div class="stat-icon green">📞</div></div>
+            <div class="stat-change up">↑ 4% vs last month</div>
+          </div>
+          <div class="stat-card blue" onclick="showCardDetail('avgResolutionTime')" style="cursor:pointer;">
+            <div class="stat-top"><div><div class="stat-value">4.2h</div><div class="stat-label">Avg Resolution Time</div></div><div class="stat-icon blue">⏱️</div></div>
+            <div class="stat-change up">↓ 0.8h improvement</div>
+          </div>
+          <div class="stat-card orange" onclick="showCardDetail('slaComplianceRate')" style="cursor:pointer;">
+            <div class="stat-top"><div><div class="stat-value">89%</div><div class="stat-label">SLA Compliance</div></div><div class="stat-icon orange">✅</div></div>
+            <div class="stat-change down">↓ 2% vs last month</div>
+          </div>
+          <div class="stat-card purple" onclick="showCardDetail('customerSatisfaction')" style="cursor:pointer;">
+            <div class="stat-top"><div><div class="stat-value">4.7/5</div><div class="stat-label">Customer Satisfaction</div></div><div class="stat-icon purple">⭐</div></div>
+            <div class="stat-change up">↑ 0.3 vs last month</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Case Volume by Type (June 2025)</span></div>
+            <div class="card-body">
+              <div style="margin-bottom:16px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:13px;font-weight:600;">Standard Cases (CA)</span><span style="font-size:13px;">47 cases</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:78%;background:linear-gradient(90deg,#0078d4,#50b3f0);"></div></div>
+              </div>
+              <div style="margin-bottom:16px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:13px;font-weight:600;">Escalations (ESC)</span><span style="font-size:13px;">9 cases</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:15%;background:linear-gradient(90deg,#8b2fc9,#b060ff);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:13px;font-weight:600;">Service Orders (S)</span><span style="font-size:13px;">22 orders</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:37%;background:linear-gradient(90deg,#038387,#00c4c9);"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><span class="card-title">Top Performing Agents (June)</span></div>
+            <div class="card-body" style="padding-top:8px;">
+              <div class="user-row">
+                <div class="avatar-wrap"><div class="user-row-avatar" style="background:linear-gradient(135deg,#0078d4,#50b3f0);">LP</div></div>
+                <div><div class="user-row-name">Lisa Park</div><div class="user-row-title">Senior Agent</div></div>
+                <div class="user-row-stats">
+                  <div class="user-row-stat"><div class="user-row-stat-val" style="color:var(--success);">97%</div><div class="user-row-stat-label">SLA</div></div>
+                  <div class="user-row-stat"><div class="user-row-stat-val">14</div><div class="user-row-stat-label">Resolved</div></div>
+                </div>
+              </div>
+              <div class="user-row">
+                <div class="avatar-wrap"><div class="user-row-avatar" style="background:linear-gradient(135deg,#107c10,#50c050);">MD</div></div>
+                <div><div class="user-row-name">Mike Davis</div><div class="user-row-title">Agent</div></div>
+                <div class="user-row-stats">
+                  <div class="user-row-stat"><div class="user-row-stat-val" style="color:var(--success);">94%</div><div class="user-row-stat-label">SLA</div></div>
+                  <div class="user-row-stat"><div class="user-row-stat-val">12</div><div class="user-row-stat-label">Resolved</div></div>
+                </div>
+              </div>
+              <div class="user-row">
+                <div class="avatar-wrap"><div class="user-row-avatar" style="background:linear-gradient(135deg,#8b2fc9,#b060ff);">AS</div></div>
+                <div><div class="user-row-name">Agent Smith</div><div class="user-row-title">Agent</div></div>
+                <div class="user-row-stats">
+                  <div class="user-row-stat"><div class="user-row-stat-val" style="color:var(--warning);">89%</div><div class="user-row-stat-label">SLA</div></div>
+                  <div class="user-row-stat"><div class="user-row-stat-val">11</div><div class="user-row-stat-label">Resolved</div></div>
+                </div>
+              </div>
+              <div class="user-row">
+                <div class="avatar-wrap"><div class="user-row-avatar" style="background:linear-gradient(135deg,#ff8c00,#ffc040);">JP</div></div>
+                <div><div class="user-row-name">Jordan Price</div><div class="user-row-title">Junior Agent</div></div>
+                <div class="user-row-stats">
+                  <div class="user-row-stat"><div class="user-row-stat-val" style="color:var(--warning);">85%</div><div class="user-row-stat-label">SLA</div></div>
+                  <div class="user-row-stat"><div class="user-row-stat-val">9</div><div class="user-row-stat-label">Resolved</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== PROFILE/SETTINGS ========== -->
+      <div class="page" id="page-profile">
+        <div class="page-header">
+          <div>
+            <div class="page-title">⚙️ Settings & Profile</div>
+            <div class="page-subtitle">Manage your account and integrations</div>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><span class="card-title">My Profile</span></div>
+            <div class="card-body">
+              <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+                <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:24px;" id="profileAvatar">AS</div>
+                <div>
+                  <div style="font-size:18px;font-weight:700;" id="profileName">Agent Smith</div>
+                  <div style="font-size:13px;color:var(--text-secondary);" id="profileRole">Agent · Customer Loyalty SUPLINE</div>
+                  <div style="font-size:12px;color:var(--accent);margin-top:4px;">agent.smith@testcompany.com</div>
+                </div>
+              </div>
+              <div class="form-field"><label>Display Name</label><input type="text" value="Agent Smith" id="profileNameInput" /></div>
+              <div class="form-field"><label>Email</label><input type="email" value="agent.smith@testcompany.com" /></div>
+              <div class="form-field"><label>Department</label><input type="text" value="Customer Loyalty SUPLINE" /></div>
+              <button class="btn btn-accent" onclick="showToast('Profile saved successfully','success')">Save Changes</button>
+            </div>
+          </div>
+
+          <div>
+            <!-- Salesforce Integration -->
+            <div class="card sf-card" style="margin-bottom:16px;">
+              <div class="card-header">
+                <div class="sf-header">
+                  <span class="sf-logo">☁️</span>
+                  <span class="card-title">Salesforce Integration</span>
+                </div>
+                <span class="sf-connected">● Connected</span>
+              </div>
+              <div class="card-body">
+                <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Your account is linked to Salesforce CRM. Customer records, case history, and account data are automatically synced.</div>
+                <div style="display:flex;gap:8px;">
+                  <button class="btn btn-outline btn-sm" onclick="showToast('Syncing Salesforce data...','success')">↻ Sync Now</button>
+                  <button class="btn btn-ghost btn-sm" onclick="showToast('Opening Salesforce settings','success')">Settings</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Teams Integration -->
+            <div class="card" style="border-left:4px solid #6264a7;">
+              <div class="card-header">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:18px;">🟪</span>
+                  <span class="card-title">Microsoft Teams Integration</span>
+                </div>
+                <span class="teams-connected">● Connected</span>
+              </div>
+              <div class="card-body">
+                <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Calendar reminders and meeting notifications are synced with your Microsoft Teams account.</div>
+                <div style="font-size:13px;margin-bottom:12px;">
+                  <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);">
+                    <span>Calendar Sync</span><span style="color:var(--success);font-weight:600;">✓ Enabled</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);">
+                    <span>Reminder Notifications</span><span style="color:var(--success);font-weight:600;">✓ Enabled</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;padding:6px 0;">
+                    <span>Meeting Auto-Create</span><span style="color:var(--success);font-weight:600;">✓ Enabled</span>
+                  </div>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="showToast('Opening Teams settings','success')">Manage Teams Settings</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ===================== MODALS ===================== -->
+
+<!-- New Case Modal -->
+<div class="modal-overlay" id="modal-newCase">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">📋 Create New Case</span>
+      <button class="modal-close" onclick="closeModal('newCase')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Case Number (Auto-generated)</label>
+          <input type="text" value="CA-0000424001" readonly style="background:#f8fafc;" />
+        </div>
+        <div class="form-field">
+          <label>Priority</label>
+          <select><option>High</option><option selected>Medium</option><option>Low</option></select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Customer (Salesforce Lookup)</label>
+        <input type="text" placeholder="Search customer name or SF Account ID..." />
+      </div>
+      <div class="form-field">
+        <label>Subject</label>
+        <input type="text" placeholder="Brief description of the issue..." />
+      </div>
+      <div class="form-field">
+        <label>Case Type</label>
+        <select><option>Billing</option><option>Technical</option><option>Service Request</option><option>Complaint</option><option>Retention</option></select>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Assigned Agent</label>
+          <select><option>Agent Smith (Me)</option><option>Lisa Park</option><option>Mike Davis</option><option>Jordan Price</option></select>
+        </div>
+        <div class="form-field">
+          <label>Follow-Up Date</label>
+          <input type="date" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Description</label>
+        <textarea placeholder="Detailed case description..."></textarea>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:10px;background:#f0f7ff;border-radius:8px;font-size:13px;">
+        <span>🟪</span> <span>Automatically create Teams reminder for follow-up date</span>
+        <input type="checkbox" checked style="margin-left:auto;" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('newCase')">Cancel</button>
+      <button class="btn btn-accent" onclick="submitNewCase()">Create Case</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Follow-Up Modal -->
+<div class="modal-overlay" id="modal-newFollowup">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">📞 Schedule Follow-Up</span>
+      <button class="modal-close" onclick="closeModal('newFollowup')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label>Customer (Salesforce Lookup)</label>
+        <input type="text" placeholder="Search customer..." />
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Linked Case / ESC / Service</label>
+          <input type="text" placeholder="CA-xxxxxxxxxx, ESC-xxxxxxxxx, S-xxx" />
+        </div>
+        <div class="form-field">
+          <label>Follow-Up Type</label>
+          <select><option>📞 Phone Call</option><option>📧 Email</option><option>🎥 Teams Meeting</option><option>💬 Chat</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Date</label>
+          <input type="date" />
+        </div>
+        <div class="form-field">
+          <label>Time</label>
+          <input type="time" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Notes / Action Items</label>
+        <textarea placeholder="What needs to be discussed or resolved?"></textarea>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:10px;background:#f0f0ff;border-radius:8px;font-size:13px;margin-bottom:8px;">
+        <span>🟪</span> <span>Add to Microsoft Teams Calendar</span>
+        <input type="checkbox" checked style="margin-left:auto;" />
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:10px;background:#f0f0ff;border-radius:8px;font-size:13px;">
+        <span>🔔</span> <span>Send reminder 15 min before</span>
+        <input type="checkbox" checked style="margin-left:auto;" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('newFollowup')">Cancel</button>
+      <button class="btn btn-accent" onclick="submitFollowup()">Schedule Follow-Up</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Escalation Modal -->
+<div class="modal-overlay" id="modal-newEscalation">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">⚠️ Create Escalation</span>
+      <button class="modal-close" onclick="closeModal('newEscalation')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-field">
+          <label>ESC Number (Auto-generated)</label>
+          <input type="text" value="ESC-000009851" readonly style="background:#f8fafc;" />
+        </div>
+        <div class="form-field">
+          <label>Linked Case</label>
+          <input type="text" placeholder="CA-xxxxxxxxxx" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Customer</label>
+        <input type="text" placeholder="Search Salesforce customer..." />
+      </div>
+      <div class="form-field">
+        <label>Escalation Reason</label>
+        <select>
+          <option>Unresolved >SLA threshold</option>
+          <option>Customer requested manager</option>
+          <option>Repeated contact for same issue</option>
+          <option>Legal/compliance concern</option>
+          <option>Executive complaint</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>SLA Deadline</label>
+          <input type="datetime-local" />
+        </div>
+        <div class="form-field">
+          <label>Escalation Owner</label>
+          <select><option>Agent Smith (Me)</option><option>Lisa Park</option><option>Mike Davis</option></select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Description</label>
+        <textarea placeholder="Why is this being escalated? What has been tried?"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('newEscalation')">Cancel</button>
+      <button class="btn btn-danger" onclick="submitEscalation()">Create Escalation</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Service Order Modal -->
+<div class="modal-overlay" id="modal-newService">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🔧 Create Service Order</span>
+      <button class="modal-close" onclick="closeModal('newService')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Service # (Auto-generated)</label>
+          <input type="text" value="S-202" readonly style="background:#f8fafc;" />
+        </div>
+        <div class="form-field">
+          <label>Linked Case/ESC</label>
+          <input type="text" placeholder="CA-xxxxxxxxxx or ESC-xxxxxxxxx" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Customer</label>
+        <input type="text" placeholder="Search Salesforce customer..." />
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Service Type</label>
+          <select><option>Installation</option><option>Repair</option><option>Replacement</option><option>Diagnostic</option><option>Network Setup</option></select>
+        </div>
+        <div class="form-field">
+          <label>Assign to Tech Team</label>
+          <select><option>Tech Team A</option><option>Tech Team B</option><option>Tech Team C</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Scheduled Date</label>
+          <input type="date" />
+        </div>
+        <div class="form-field">
+          <label>Scheduled Time</label>
+          <input type="time" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Notes</label>
+        <textarea placeholder="Service details and instructions..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('newService')">Cancel</button>
+      <button class="btn btn-accent" onclick="submitService()">Create Service Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Teams Reminder Modal -->
+<div class="modal-overlay" id="modal-newReminder">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🟪 Add Teams Reminder</span>
+      <button class="modal-close" onclick="closeModal('newReminder')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label>Reminder Title</label>
+        <input type="text" placeholder="e.g. Follow-Up: Maria Gonzalez – CA-0000423891" />
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Date</label>
+          <input type="date" />
+        </div>
+        <div class="form-field">
+          <label>Time</label>
+          <input type="time" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Meeting Type</label>
+        <select><option>📅 Calendar Reminder</option><option>🎥 Teams Meeting</option><option>📞 Phone Call Reminder</option><option>📧 Email Reminder</option></select>
+      </div>
+      <div class="form-field">
+        <label>Linked Case/ESC/Service</label>
+        <input type="text" placeholder="CA-xxxxxxxxxx, ESC-xxxxxxxxx, or S-xxx" />
+      </div>
+      <div class="form-field">
+        <label>Notify</label>
+        <select>
+          <option>Only Me</option>
+          <option>Me + Team</option>
+          <option>Me + Specific Agents</option>
+        </select>
+      </div>
+      <div style="padding:10px;background:#f0f0ff;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;">
+        <span>🔔</span> This reminder will be added to your Microsoft Teams calendar automatically.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('newReminder')">Cancel</button>
+      <button class="btn btn-accent" onclick="submitReminder()" style="background:linear-gradient(135deg,#464eb8,#6264a7);">Add to Teams Calendar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Case Detail Modal -->
+<div class="modal-overlay" id="modal-caseDetail">
+  <div class="modal" style="width:640px;">
+    <div class="modal-header">
+      <span class="modal-title" id="caseDetailTitle">Case Details</span>
+      <button class="modal-close" onclick="closeModal('caseDetail')">✕</button>
+    </div>
+    <div class="modal-body" id="caseDetailBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('caseDetail')">Close</button>
+      <button class="btn btn-outline" onclick="openModal('newFollowup'); closeModal('caseDetail')">📞 Add Follow-Up</button>
+      <button class="btn btn-accent" onclick="showToast('Case updated successfully','success'); closeModal('caseDetail')">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Card Detail Modal -->
+<div class="modal-overlay" id="modal-cardDetail">
+  <div class="modal" style="width:700px;max-height:80vh;">
+    <div class="modal-header">
+      <span class="modal-title" id="cardDetailTitle">Card Details</span>
+      <button class="modal-close" onclick="closeModal('cardDetail')">✕</button>
+    </div>
+    <div class="modal-body" id="cardDetailBody" style="max-height:60vh;overflow-y:auto;"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('cardDetail')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="app.js"></script>
+<script src="card-details.js"></script>
+</body>
+</html>
