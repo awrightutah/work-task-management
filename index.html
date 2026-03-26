@@ -1057,15 +1057,15 @@
           </div>
         </div>
         <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
-          <div class="stat-card code-red">
+          <div class="stat-card code-red" onclick="showCardDetail('activeCodeReds')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value">4</div><div class="stat-label">Active Code Reds</div></div><div class="stat-icon code-red">🔴</div></div>
             <div class="stat-change down">Immediate action needed</div>
           </div>
-          <div class="stat-card orange">
+          <div class="stat-card orange" onclick="showCardDetail('codeRedContactedToday')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value">2</div><div class="stat-label">Contacted Today</div></div><div class="stat-icon orange">📞</div></div>
             <div class="stat-change up">↑ 1 from yesterday</div>
           </div>
-          <div class="stat-card green">
+          <div class="stat-card green" onclick="showCardDetail('codeRedResolvedWeek')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value">6</div><div class="stat-label">Resolved This Week</div></div><div class="stat-icon green">✅</div></div>
             <div class="stat-change up">↑ 3 from last week</div>
           </div>
@@ -1140,15 +1140,15 @@
           </div>
         </div>
         <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
-          <div class="stat-card code-yellow">
+          <div class="stat-card code-yellow" onclick="showCardDetail('atRiskAccounts')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value">5</div><div class="stat-label">At-Risk Accounts</div></div><div class="stat-icon code-yellow">🟡</div></div>
             <div class="stat-change down">Retention action needed</div>
           </div>
-          <div class="stat-card orange">
+          <div class="stat-card orange" onclick="showCardDetail('revenueAtRisk')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value">$2,528</div><div class="stat-label">Revenue at Risk</div></div><div class="stat-icon orange">💰</div></div>
             <div class="stat-change down">Avg. $42.14/mo contract</div>
           </div>
-          <div class="stat-card green">
+          <div class="stat-card green" onclick="showCardDetail('retainedThisWeek')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value">3</div><div class="stat-label">Retained This Week</div></div><div class="stat-icon green">✅</div></div>
             <div class="stat-change up">↑ 2 from last week</div>
           </div>
@@ -1236,16 +1236,16 @@
           </div>
         </div>
         <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
-          <div class="stat-card orange">
+          <div class="stat-card orange" onclick="showCardDetail('creditsPending')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value" id="creditStatPending">0</div><div class="stat-label">Pending Approval</div></div><div class="stat-icon orange">⏳</div></div>
           </div>
-          <div class="stat-card green">
+          <div class="stat-card green" onclick="showCardDetail('creditsApproved')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value" id="creditStatApproved">0</div><div class="stat-label">Approved</div></div><div class="stat-icon green">✅</div></div>
           </div>
-          <div class="stat-card red">
+          <div class="stat-card red" onclick="showCardDetail('creditsDenied')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value" id="creditStatDenied">0</div><div class="stat-label">Denied</div></div><div class="stat-icon red">❌</div></div>
           </div>
-          <div class="stat-card blue">
+          <div class="stat-card blue" onclick="showCardDetail('creditsTotalMonth')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value" id="creditStatTotal">$0</div><div class="stat-label">Total Approved (Month)</div></div><div class="stat-icon blue">💰</div></div>
           </div>
         </div>
@@ -1298,16 +1298,16 @@
           </div>
         </div>
         <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
-          <div class="stat-card orange">
+          <div class="stat-card orange" onclick="showCardDetail('amPending')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value" id="amStatPending">0</div><div class="stat-label">Pending AM Review</div></div><div class="stat-icon orange">⏳</div></div>
           </div>
-          <div class="stat-card green">
+          <div class="stat-card green" onclick="showCardDetail('amApproved')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value" id="amStatApproved">0</div><div class="stat-label">Approved</div></div><div class="stat-icon green">✅</div></div>
           </div>
-          <div class="stat-card red">
+          <div class="stat-card red" onclick="showCardDetail('amDenied')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value" id="amStatDenied">0</div><div class="stat-label">Denied</div></div><div class="stat-icon red">❌</div></div>
           </div>
-          <div class="stat-card purple">
+          <div class="stat-card purple" onclick="showCardDetail('amSfPending')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value" id="amStatSfPending">0</div><div class="stat-label">SF Pending Sync</div></div><div class="stat-icon purple">☁️</div></div>
           </div>
         </div>

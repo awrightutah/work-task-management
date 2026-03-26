@@ -199,6 +199,125 @@ const cardDetailData = {
       { metric: 'Improvement', value: '+0.3' },
     ]
   },
+,
+
+  // Code Red Page Stats
+  'activeCodeReds': {
+    title: '🔴 Active Code Reds',
+    items: [
+      { id: 'ESC-000009832', customer: 'Maria Gonzalez', subject: 'Billing dispute - SLA breached, exec escalation', status: 'critical', priority: 'critical' },
+      { id: 'ESC-000009791', customer: 'Patricia Lam', subject: 'Cancellation threat - retention offer needed', status: 'critical', priority: 'critical' },
+      { id: 'CA-0000422998', customer: 'Derek Osei', subject: 'Multiple failed resolutions - exec complaint', status: 'critical', priority: 'critical' },
+      { id: 'ESC-000009720', customer: 'Helen Vargas', subject: 'Legal threat - refund denied after 3 requests', status: 'critical', priority: 'critical' },
+    ]
+  },
+  'codeRedContactedToday': {
+    title: '📞 Code Reds Contacted Today',
+    items: [
+      { id: 'ESC-000009832', customer: 'Maria Gonzalez', subject: 'Called at 10:15 AM - escalation review scheduled', status: 'in-progress', priority: 'critical' },
+      { id: 'CA-0000422998', customer: 'Derek Osei', subject: 'Teams meeting at 2:00 PM - manager involved', status: 'in-progress', priority: 'critical' },
+    ]
+  },
+  'codeRedResolvedWeek': {
+    title: '✅ Code Reds Resolved This Week',
+    items: [
+      { id: 'ESC-000009801', customer: 'Thomas Nguyen', subject: 'Billing credit applied - customer satisfied', status: 'resolved', priority: 'high' },
+      { id: 'CA-0000423102', customer: 'Aisha Patel', subject: 'Service restored - follow-up confirmed', status: 'resolved', priority: 'high' },
+      { id: 'ESC-000009778', customer: 'Robert Kim', subject: 'Retention offer accepted - contract renewed', status: 'resolved', priority: 'high' },
+      { id: 'CA-0000422890', customer: 'Sandra Okafor', subject: 'Equipment replaced - issue resolved', status: 'resolved', priority: 'medium' },
+      { id: 'ESC-000009754', customer: 'James Thornton', subject: 'Refund processed - customer retained', status: 'resolved', priority: 'high' },
+      { id: 'CA-0000422775', customer: 'Lisa Park', subject: 'Rate adjustment applied - complaint closed', status: 'resolved', priority: 'medium' },
+    ]
+  },
+
+  // Code Yellow Page Stats
+  'atRiskAccounts': {
+    title: '🟡 At-Risk Accounts',
+    items: [
+      { id: 'CA-0000423601', customer: 'Patricia Lam', subject: 'Cancellation request submitted - retention pending', status: 'warning', priority: 'high' },
+      { id: 'CA-0000422801', customer: 'Helen Vargas', subject: 'Cancellation pending - refund dispute ongoing', status: 'warning', priority: 'high' },
+      { id: 'CA-0000422650', customer: 'Thomas Nguyen', subject: 'Considering cancellation - price increase concern', status: 'at-risk', priority: 'medium' },
+      { id: 'CA-0000422490', customer: 'Aisha Patel', subject: 'Cancellation threat during call - needs callback', status: 'at-risk', priority: 'high' },
+      { id: 'CA-0000422310', customer: 'Marcus Webb', subject: 'Service dissatisfaction - evaluating competitors', status: 'at-risk', priority: 'medium' },
+    ]
+  },
+  'revenueAtRisk': {
+    title: '💰 Revenue at Risk',
+    items: [
+      { id: 'CA-0000423601', customer: 'Patricia Lam', subject: 'Contract value: $1,240/yr - cancellation submitted', status: 'warning', priority: 'high' },
+      { id: 'CA-0000422801', customer: 'Helen Vargas', subject: 'Contract value: $480/yr - billing dispute', status: 'warning', priority: 'high' },
+      { id: 'CA-0000422650', customer: 'Thomas Nguyen', subject: 'Contract value: $360/yr - price sensitivity', status: 'at-risk', priority: 'medium' },
+      { id: 'CA-0000422490', customer: 'Aisha Patel', subject: 'Contract value: $448/yr - poor experience', status: 'at-risk', priority: 'high' },
+    ]
+  },
+  'retainedThisWeek': {
+    title: '✅ Accounts Retained This Week',
+    items: [
+      { id: 'CA-0000422200', customer: 'Robert Kim', subject: 'Retention offer accepted - 12-month extension', status: 'resolved', priority: 'high' },
+      { id: 'CA-0000422105', customer: 'Sandra Okafor', subject: 'Service credit applied - customer retained', status: 'resolved', priority: 'medium' },
+      { id: 'CA-0000421980', customer: 'Mike Davis', subject: 'Plan downgrade negotiated - cancellation avoided', status: 'resolved', priority: 'medium' },
+    ]
+  },
+
+  // Credit Requests Page Stats
+  'creditsPending': {
+    title: '⏳ Pending Credit Approvals',
+    items: [
+      { id: 'CR-00081', customer: 'Maria Gonzalez', subject: 'Billing Error - $45.00 | Duplicate charge Jun cycle', status: 'pending', priority: 'medium' },
+      { id: 'CR-00076', customer: 'Sandra Okafor', subject: 'Equipment Issue - $20.00 | Equipment delivery delay', status: 'pending', priority: 'low' },
+    ]
+  },
+  'creditsApproved': {
+    title: '✅ Approved Credit Requests',
+    items: [
+      { id: 'CR-00080', customer: 'James Thornton', subject: 'Service Outage - $25.00 | SF Pending Sync', status: 'scheduled', priority: 'medium' },
+      { id: 'CR-00079', customer: 'Patricia Lam', subject: 'Retention Offer - $75.00 | Applied in Salesforce', status: 'resolved', priority: 'high' },
+      { id: 'CR-00078', customer: 'Derek Osei', subject: 'Goodwill Credit - $120.00 | Applied in Salesforce', status: 'resolved', priority: 'high' },
+    ]
+  },
+  'creditsDenied': {
+    title: '❌ Denied Credit Requests',
+    items: [
+      { id: 'CR-00077', customer: 'Helen Vargas', subject: 'Billing Error - $30.00 | Denied by supervisor', status: 'closed', priority: 'low' },
+    ]
+  },
+  'creditsTotalMonth': {
+    title: '💰 Total Credits Approved This Month',
+    items: [
+      { metric: 'Total Approved Amount', value: '$195.00' },
+      { metric: 'Credits Applied in SF', value: '$195.00' },
+      { metric: 'SF Pending Sync', value: '$25.00' },
+      { metric: 'Requests Approved', value: '3' },
+    ]
+  },
+
+  // AM Approvals Page Stats
+  'amPending': {
+    title: '⏳ Pending AM Approval Requests',
+    items: [
+      { id: 'AM-00054', customer: 'Maria Gonzalez', subject: 'Early Termination Waiver | High priority | Agent Smith', status: 'pending', priority: 'high' },
+      { id: 'AM-00053', customer: 'Patricia Lam', subject: 'Retention Exception | High priority | Lisa Park', status: 'pending', priority: 'high' },
+      { id: 'AM-00052', customer: 'James Thornton', subject: 'Contract Exception | Medium priority | Agent Smith', status: 'pending', priority: 'medium' },
+    ]
+  },
+  'amApproved': {
+    title: '✅ Approved AM Requests',
+    items: [
+      { id: 'AM-00050', customer: 'Robert Kim', subject: 'Service Plan Change | Applied in Salesforce', status: 'resolved', priority: 'low' },
+    ]
+  },
+  'amDenied': {
+    title: '❌ Denied AM Requests',
+    items: [
+      { id: 'AM-00049', customer: 'Helen Vargas', subject: 'Refund Request | Denied - billing start date unconfirmed', status: 'closed', priority: 'medium' },
+    ]
+  },
+  'amSfPending': {
+    title: '☁️ AM Approvals - SF Pending Sync',
+    items: [
+      { id: 'AM-00051', customer: 'Derek Osei', subject: 'Discount Override | 15% loyalty discount - pending Salesforce sync', status: 'scheduled', priority: 'medium' },
+    ]
+  }
 };
 
 // Function to show card detail modal
@@ -251,7 +370,7 @@ function showCardDetail(cardType) {
         `).join('')}
       </tbody>
     </table>`;
-  } else if (['firstCallResolution', 'avgResolutionTime', 'slaComplianceRate', 'customerSatisfaction'].includes(cardType)) {
+  } else if (['firstCallResolution', 'avgResolutionTime', 'slaComplianceRate', 'customerSatisfaction', 'creditsTotalMonth'].includes(cardType)) {
     bodyHtml = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       ${data.items.map(item => `
         <div style="padding:16px;background:var(--bg-main);border-radius:8px;text-align:center;">
@@ -274,7 +393,7 @@ function showCardDetail(cardType) {
       <tbody>
         ${data.items.map(item => `
           <tr style="border-bottom:1px solid var(--border);cursor:pointer;" onclick="handleCardItemClick('${item.id || ''}', '${cardType}')">
-            <td style="padding:10px;"><span class="case-badge ${item.id?.startsWith('ESC') ? 'esc' : item.id?.startsWith('S-') ? 'srv' : 'ca'}">${item.id || '-'}</span></td>
+            <td style="padding:10px;"><span class="case-badge ${item.id?.startsWith('ESC') ? 'esc' : item.id?.startsWith('S-') ? 'srv' : item.id?.startsWith('CR-') ? 'cr' : item.id?.startsWith('AM-') ? 'am' : 'ca'}">${item.id || '-'}</span></td>
             <td style="padding:10px;font-weight:600;">${item.customer || '-'}</td>
             <td style="padding:10px;font-size:13px;color:var(--text-secondary);">${item.subject || item.reason || item.time || '-'}</td>
             <td style="padding:10px;text-align:center;"><span class="status-badge ${item.status || 'open'}">${capitalizeStatus(item.status || 'open')}</span></td>
@@ -309,6 +428,14 @@ function handleCardItemClick(id, cardType) {
     closeModal('cardDetail');
     showPage('followups');
     showToast(`Viewing follow-up ${id}`, 'success');
+  } else if (id.startsWith('CR-')) {
+    closeModal('cardDetail');
+    showPage('credits');
+    showToast(`Viewing credit request ${id}`, 'success');
+  } else if (id.startsWith('AM-')) {
+    closeModal('cardDetail');
+    showPage('amapprovals');
+    showToast(`Viewing AM approval ${id}`, 'success');
   }
 }
 
