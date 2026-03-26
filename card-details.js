@@ -126,7 +126,7 @@ const cardDetailData = {
   },
   // Admin page stats
   'activeAgents': {
-    title: '👥 Active Agents',
+    title: '👥 Active Agents (247 Total)',
     items: [
       { name: 'Lisa Park', title: 'Senior Agent', status: 'online', cases: 8 },
       { name: 'Mike Davis', title: 'Agent', status: 'online', cases: 7 },
@@ -218,7 +218,7 @@ const cardDetailData = {
     ]
   },
   'codeRedResolvedWeek': {
-    title: '✅ Code Reds Resolved This Week',
+    title: '✅ Code Reds Resolved This Week (112 Total)',
     items: [
       { id: 'ESC-000009801', customer: 'Thomas Nguyen', subject: 'Billing credit applied - customer satisfied', status: 'resolved', priority: 'high' },
       { id: 'CA-0000423102', customer: 'Aisha Patel', subject: 'Service restored - follow-up confirmed', status: 'resolved', priority: 'high' },
@@ -250,7 +250,7 @@ const cardDetailData = {
     ]
   },
   'retainedThisWeek': {
-    title: '✅ Accounts Retained This Week',
+    title: '✅ Accounts Retained This Week (87 Total)',
     items: [
       { id: 'CA-0000422200', customer: 'Robert Kim', subject: 'Retention offer accepted - 12-month extension', status: 'resolved', priority: 'high' },
       { id: 'CA-0000422105', customer: 'Sandra Okafor', subject: 'Service credit applied - customer retained', status: 'resolved', priority: 'medium' },
@@ -321,7 +321,7 @@ const cardDetailData = {
 
   // Code Yellow new stat cards
   'codeYellowsSubmitted': {
-    title: '🟡 Code Yellows Submitted This Month',
+    title: '🟡 Code Yellows Submitted This Month (193 Total)',
     items: [
       { id: 'CA-0000423891', customer: 'Maria Gonzalez', subject: 'Moving - wants to cancel service', status: 'warning', priority: 'high' },
       { id: 'CA-0000423742', customer: 'James Thornton', subject: 'Price complaint - found cheaper competitor', status: 'warning', priority: 'medium' },

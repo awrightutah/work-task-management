@@ -81,6 +81,20 @@ function selectRole(role) {
   selectedRole = role;
   document.getElementById('roleUser').classList.toggle('active', role === 'user');
   document.getElementById('roleAdmin').classList.toggle('active', role === 'admin');
+
+  const emailEl = document.getElementById('loginEmail');
+  const titleEl = document.getElementById('loginTitle');
+  const subtitleEl = document.getElementById('loginSubtitle');
+
+  if (role === 'admin') {
+    if (emailEl) emailEl.value = 'admin.johnson@testcompany.com';
+    if (titleEl) titleEl.textContent = 'Administrator Login';
+    if (subtitleEl) subtitleEl.textContent = 'Signing in as Supervisor / Admin';
+  } else {
+    if (emailEl) emailEl.value = 'agent.smith@testcompany.com';
+    if (titleEl) titleEl.textContent = 'Welcome Back';
+    if (subtitleEl) subtitleEl.textContent = 'Sign in to your workspace';
+  }
 }
 
 function doLogin() {
