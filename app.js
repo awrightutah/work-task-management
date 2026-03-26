@@ -306,7 +306,7 @@ function buildAgentList() {
         </div>
       </div>
       <div style="margin-left:8px;display:flex;gap:6px;">
-        <button class="btn btn-sm btn-accent" onclick="event.stopPropagation(); openAssignCase('${a.name}')">📋 Assign Case</button>
+        ${currentUser.role === 'admin' ? `<button class="btn btn-sm btn-accent" onclick="event.stopPropagation(); openAssignCase('${a.name}')">📋 Assign Case</button>` : ''}
         <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); showPage('allcalendars')">📅 Calendar</button>
       </div>
     </div>
