@@ -359,7 +359,7 @@ function showCardDetail(cardType) {
         </div>
       `).join('')}
     </div>`;
- else if (['firstCallResolution', 'avgResolutionTime', 'customerSatisfaction', 'creditsTotalMonth'].includes(cardType)) {
+  } else if (['firstCallResolution', 'avgResolutionTime', 'customerSatisfaction', 'creditsTotalMonth'].includes(cardType)) {
     bodyHtml = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       ${data.items.map(item => `
         <div style="padding:16px;background:var(--bg-main);border-radius:8px;text-align:center;">
