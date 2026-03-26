@@ -45,7 +45,7 @@ const cardDetailData = {
   'codeRed': {
     title: '🔴 Code Red – Critical Cases',
     items: [
-      { id: 'ESC-000009832', customer: 'Maria Gonzalez', subject: 'Billing dispute – SLA breached', status: 'critical', priority: 'critical' },
+      { id: 'ESC-000009832', customer: 'Maria Gonzalez', subject: 'Billing dispute – unresolved, exec escalation', status: 'critical', priority: 'critical' },
       { id: 'ESC-000009791', customer: 'Patricia Lam', subject: 'Cancellation – retention needed', status: 'critical', priority: 'critical' },
       { id: 'CA-0000422998', customer: 'Derek Osei', subject: 'Exec complaint – multiple failures', status: 'critical', priority: 'critical' },
       { id: 'ESC-000009720', customer: 'Helen Vargas', subject: 'Legal threat – refund denied', status: 'critical', priority: 'critical' },
@@ -109,13 +109,7 @@ const cardDetailData = {
       { id: 'ESC-000009720', customer: 'Helen Vargas', subject: 'Refund request denied – legal threat', status: 'pending', deadline: 'Jun 28, 2025' },
     ]
   },
-  'slaBreachRisk': {
-    title: '⏱️ SLA Breach Risk',
-    items: [
-      { id: 'ESC-000009832', customer: 'Maria Gonzalez', subject: 'Already breached SLA', status: 'breached', deadline: 'Yesterday' },
-      { id: 'ESC-000009791', customer: 'Patricia Lam', subject: 'At risk – deadline today', status: 'at-risk', deadline: 'Today 5:00 PM' },
-    ]
-  },
+
   'resolvedMonth': {
     title: '✅ Resolved This Month',
     items: [
@@ -153,15 +147,7 @@ const cardDetailData = {
       { id: 'ESC-000009745', customer: 'Derek Osei', agent: 'Mike Davis', status: 'escalated' },
     ]
   },
-  'slaCompliance': {
-    title: '📊 SLA Compliance Details',
-    items: [
-      { agent: 'Lisa Park', sla: '97%', cases: 8, onTime: '8/8' },
-      { agent: 'Mike Davis', sla: '94%', cases: 7, onTime: '7/7' },
-      { agent: 'Agent Smith', sla: '89%', cases: 12, onTime: '10/12' },
-      { agent: 'Jordan Price', sla: '85%', cases: 5, onTime: '4/5' },
-    ]
-  },
+
   // Reports page stats
   'firstCallResolution': {
     title: '📞 First Call Resolution',
@@ -181,15 +167,7 @@ const cardDetailData = {
       { metric: 'Improvement', value: '0.8 hours' },
     ]
   },
-  'slaComplianceRate': {
-    title: '✅ SLA Compliance Rate',
-    items: [
-      { metric: 'Current Rate', value: '89%' },
-      { metric: 'Previous Month', value: '91%' },
-      { metric: 'Target', value: '95%' },
-      { metric: 'Change', value: '-2%' },
-    ]
-  },
+
   'customerSatisfaction': {
     title: '⭐ Customer Satisfaction',
     items: [
@@ -204,7 +182,7 @@ const cardDetailData = {
   'activeCodeReds': {
     title: '🔴 Active Code Reds',
     items: [
-      { id: 'ESC-000009832', customer: 'Maria Gonzalez', subject: 'Billing dispute - SLA breached, exec escalation', status: 'critical', priority: 'critical' },
+      { id: 'ESC-000009832', customer: 'Maria Gonzalez', subject: 'Billing dispute - unresolved, exec escalation', status: 'critical', priority: 'critical' },
       { id: 'ESC-000009791', customer: 'Patricia Lam', subject: 'Cancellation threat - retention offer needed', status: 'critical', priority: 'critical' },
       { id: 'CA-0000422998', customer: 'Derek Osei', subject: 'Multiple failed resolutions - exec complaint', status: 'critical', priority: 'critical' },
       { id: 'ESC-000009720', customer: 'Helen Vargas', subject: 'Legal threat - refund denied after 3 requests', status: 'critical', priority: 'critical' },
@@ -381,28 +359,7 @@ function showCardDetail(cardType) {
         </div>
       `).join('')}
     </div>`;
-  } else if (cardType === 'slaCompliance') {
-    bodyHtml = `<table style="width:100%;border-collapse:collapse;">
-      <thead>
-        <tr style="background:var(--bg-main);">
-          <th style="padding:10px;text-align:left;border-radius:6px;">Agent</th>
-          <th style="padding:10px;text-align:center;border-radius:6px;">SLA</th>
-          <th style="padding:10px;text-align:center;border-radius:6px;">Cases</th>
-          <th style="padding:10px;text-align:center;border-radius:6px;">On Time</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${data.items.map(item => `
-          <tr style="border-bottom:1px solid var(--border);">
-            <td style="padding:10px;font-weight:600;">${item.agent}</td>
-            <td style="padding:10px;text-align:center;color:${parseFloat(item.sla)>=90?'var(--success)':'var(--warning)'};font-weight:600;">${item.sla}</td>
-            <td style="padding:10px;text-align:center;">${item.cases}</td>
-            <td style="padding:10px;text-align:center;">${item.onTime}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>`;
-  } else if (['firstCallResolution', 'avgResolutionTime', 'slaComplianceRate', 'customerSatisfaction', 'creditsTotalMonth'].includes(cardType)) {
+ else if (['firstCallResolution', 'avgResolutionTime', 'customerSatisfaction', 'creditsTotalMonth'].includes(cardType)) {
     bodyHtml = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       ${data.items.map(item => `
         <div style="padding:16px;background:var(--bg-main);border-radius:8px;text-align:center;">
@@ -503,12 +460,10 @@ function initCardClickHandlers() {
     else if (labelText.includes('this week')) cardType = 'thisWeek';
     else if (labelText.includes('completed') && labelText.includes('month')) cardType = 'completedMonth';
     else if (labelText.includes('active') && labelText.includes('escalation')) cardType = 'activeEscalations';
-    else if (labelText.includes('sla breach')) cardType = 'slaBreachRisk';
     else if (labelText.includes('resolved') && labelText.includes('month')) cardType = 'resolvedMonth';
     else if (labelText.includes('active agent')) cardType = 'activeAgents';
     else if (labelText.includes('open cases') && labelText.includes('team')) cardType = 'teamOpenCases';
     else if (labelText.includes('team escalation')) cardType = 'teamEscalations';
-    else if (labelText.includes('sla compliance')) cardType = 'slaCompliance';
     else if (labelText.includes('first call')) cardType = 'firstCallResolution';
     else if (labelText.includes('resolution time')) cardType = 'avgResolutionTime';
     else if (labelText.includes('customer satisfaction')) cardType = 'customerSatisfaction';

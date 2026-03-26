@@ -345,7 +345,7 @@
               <div class="activity-item">
                 <div class="activity-dot red"></div>
                 <div class="activity-content">
-                  <div class="activity-text"><strong>ESC-000009791</strong> — SLA breach warning: Response overdue</div>
+                  <div class="activity-text"><strong>ESC-000009791</strong> — Response overdue: Follow-up contact required</div>
                   <div class="activity-time">3 hours ago</div>
                 </div>
               </div>
@@ -549,19 +549,14 @@
           <button class="btn btn-accent" onclick="openModal('newEscalation')">+ New Escalation</button>
         </div>
 
-        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
           <div class="stat-card red" onclick="showCardDetail('activeEscalations')" style="cursor:pointer;">
             <div class="stat-top">
               <div><div class="stat-value">318</div><div class="stat-label">Active Escalations</div></div>
               <div class="stat-icon red">🔴</div>
             </div>
           </div>
-          <div class="stat-card orange" onclick="showCardDetail('slaBreachRisk')" style="cursor:pointer;">
-            <div class="stat-top">
-              <div><div class="stat-value">76</div><div class="stat-label">SLA Breach Risk</div></div>
-              <div class="stat-icon orange">⏱️</div>
-            </div>
-          </div>
+
           <div class="stat-card green" onclick="showCardDetail('resolvedMonth')" style="cursor:pointer;">
             <div class="stat-top">
               <div><div class="stat-value">1,842</div><div class="stat-label">Resolved This Month</div></div>
@@ -581,7 +576,6 @@
                   <th>Customer</th>
                   <th>Reason</th>
                   <th>Status</th>
-                  <th>SLA Deadline</th>
                   <th>Owner</th>
                   <th>Actions</th>
                 </tr>
@@ -593,7 +587,6 @@
                   <td>Maria Gonzalez</td>
                   <td>Billing dispute unresolved >14 days</td>
                   <td><span class="status-badge overdue">Overdue</span></td>
-                  <td style="color:var(--danger);font-weight:600;">⚠️ Yesterday</td>
                   <td>Agent Smith</td>
                   <td>
                     <button class="btn btn-sm btn-accent" onclick="showToast('Escalation ESC-000009832 updated','success')">Update</button>
@@ -606,7 +599,6 @@
                   <td>Patricia Lam</td>
                   <td>Service cancellation – retention failure</td>
                   <td><span class="status-badge escalated">Escalated</span></td>
-                  <td style="color:var(--warning);font-weight:600;">Today 5:00 PM</td>
                   <td>Agent Lisa Park</td>
                   <td>
                     <button class="btn btn-sm btn-accent" onclick="showToast('Escalation ESC-000009791 updated','success')">Update</button>
@@ -619,7 +611,6 @@
                   <td>Derek Osei</td>
                   <td>Multiple failed resolutions – exec complaint</td>
                   <td><span class="status-badge escalated">Escalated</span></td>
-                  <td>Tomorrow 12:00 PM</td>
                   <td>Agent Mike Davis</td>
                   <td>
                     <button class="btn btn-sm btn-accent" onclick="showToast('Escalation ESC-000009745 updated','success')">Update</button>
@@ -632,7 +623,6 @@
                   <td>Helen Vargas</td>
                   <td>Refund request denied – legal threat</td>
                   <td><span class="status-badge pending">Pending</span></td>
-                  <td>Jun 28, 2025</td>
                   <td>Agent Smith</td>
                   <td>
                     <button class="btn btn-sm btn-accent" onclick="showToast('Escalation ESC-000009720 updated','success')">Update</button>
@@ -1367,7 +1357,10 @@
             <div class="page-title">👥 Team Overview <span style="font-size:14px;background:#ffebee;color:#d13438;padding:3px 10px;border-radius:20px;margin-left:8px;font-weight:600;">Admin Only</span></div>
             <div class="page-subtitle">View all agents' workloads and performance — Customer Loyalty SUPLINE</div>
           </div>
-          <button class="btn btn-accent" onclick="showPage('allcalendars')">📆 View All Calendars</button>
+            <div style="display:flex;gap:8px;">
+            <button class="btn btn-outline" onclick="openModal('assignCase')">📋 Assign a Case</button>
+            <button class="btn btn-accent" onclick="showPage('allcalendars')">📆 View All Calendars</button>
+          </div>
         </div>
 
         <div class="stats-grid">
@@ -1380,8 +1373,31 @@
           <div class="stat-card red" onclick="showCardDetail('teamEscalations')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value">318</div><div class="stat-label">Active Escalations</div></div><div class="stat-icon red">⚠️</div></div>
           </div>
-          <div class="stat-card green" onclick="showCardDetail('slaCompliance')" style="cursor:pointer;">
-            <div class="stat-top"><div><div class="stat-value">89%</div><div class="stat-label">SLA Compliance</div></div><div class="stat-icon green">✅</div></div>
+
+        </div>
+
+        <!-- Unassigned Cases Queue -->
+        <div class="card" style="margin-bottom:16px;border-left:4px solid var(--warning);">
+          <div class="card-header">
+            <span class="card-title">📋 Unassigned Cases Queue</span>
+            <span style="font-size:12px;color:var(--warning);font-weight:700;" id="unassignedCount">5 unassigned</span>
+            <button class="btn btn-ghost btn-sm" onclick="showPage('cases')" style="margin-left:auto;">View All Cases</button>
+          </div>
+          <div class="table-wrap">
+            <table id="unassignedCasesTable">
+              <thead>
+                <tr>
+                  <th>Case #</th>
+                  <th>Customer</th>
+                  <th>Subject</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="unassignedCasesBody">
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -1437,10 +1453,7 @@
             <div class="stat-top"><div><div class="stat-value">4.2h</div><div class="stat-label">Avg Resolution Time</div></div><div class="stat-icon blue">⏱️</div></div>
             <div class="stat-change up">↓ 0.8h improvement</div>
           </div>
-          <div class="stat-card orange" onclick="showCardDetail('slaComplianceRate')" style="cursor:pointer;">
-            <div class="stat-top"><div><div class="stat-value">89%</div><div class="stat-label">SLA Compliance</div></div><div class="stat-icon orange">✅</div></div>
-            <div class="stat-change down">↓ 2% vs last month</div>
-          </div>
+
           <div class="stat-card purple" onclick="showCardDetail('customerSatisfaction')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value">4.7/5</div><div class="stat-label">Customer Satisfaction</div></div><div class="stat-icon purple">⭐</div></div>
             <div class="stat-change up">↑ 0.3 vs last month</div>
@@ -1473,7 +1486,6 @@
                 <div class="avatar-wrap"><div class="user-row-avatar" style="background:linear-gradient(135deg,#0078d4,#50b3f0);">LP</div></div>
                 <div><div class="user-row-name">Lisa Park</div><div class="user-row-title">Senior Agent</div></div>
                 <div class="user-row-stats">
-                  <div class="user-row-stat"><div class="user-row-stat-val" style="color:var(--success);">97%</div><div class="user-row-stat-label">SLA</div></div>
                   <div class="user-row-stat"><div class="user-row-stat-val">14</div><div class="user-row-stat-label">Resolved</div></div>
                 </div>
               </div>
@@ -1481,7 +1493,6 @@
                 <div class="avatar-wrap"><div class="user-row-avatar" style="background:linear-gradient(135deg,#107c10,#50c050);">MD</div></div>
                 <div><div class="user-row-name">Mike Davis</div><div class="user-row-title">Agent</div></div>
                 <div class="user-row-stats">
-                  <div class="user-row-stat"><div class="user-row-stat-val" style="color:var(--success);">94%</div><div class="user-row-stat-label">SLA</div></div>
                   <div class="user-row-stat"><div class="user-row-stat-val">12</div><div class="user-row-stat-label">Resolved</div></div>
                 </div>
               </div>
@@ -1489,7 +1500,6 @@
                 <div class="avatar-wrap"><div class="user-row-avatar" style="background:linear-gradient(135deg,#8b2fc9,#b060ff);">AS</div></div>
                 <div><div class="user-row-name">Agent Smith</div><div class="user-row-title">Agent</div></div>
                 <div class="user-row-stats">
-                  <div class="user-row-stat"><div class="user-row-stat-val" style="color:var(--warning);">89%</div><div class="user-row-stat-label">SLA</div></div>
                   <div class="user-row-stat"><div class="user-row-stat-val">11</div><div class="user-row-stat-label">Resolved</div></div>
                 </div>
               </div>
@@ -1497,7 +1507,6 @@
                 <div class="avatar-wrap"><div class="user-row-avatar" style="background:linear-gradient(135deg,#ff8c00,#ffc040);">JP</div></div>
                 <div><div class="user-row-name">Jordan Price</div><div class="user-row-title">Junior Agent</div></div>
                 <div class="user-row-stats">
-                  <div class="user-row-stat"><div class="user-row-stat-val" style="color:var(--warning);">85%</div><div class="user-row-stat-label">SLA</div></div>
                   <div class="user-row-stat"><div class="user-row-stat-val">9</div><div class="user-row-stat-label">Resolved</div></div>
                 </div>
               </div>
@@ -1720,22 +1729,15 @@
       <div class="form-field">
         <label>Escalation Reason</label>
         <select>
-          <option>Unresolved >SLA threshold</option>
           <option>Customer requested manager</option>
           <option>Repeated contact for same issue</option>
           <option>Legal/compliance concern</option>
           <option>Executive complaint</option>
         </select>
       </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>SLA Deadline</label>
-          <input type="datetime-local" />
-        </div>
-        <div class="form-field">
-          <label>Escalation Owner</label>
-          <select><option>Agent Smith (Me)</option><option>Lisa Park</option><option>Mike Davis</option></select>
-        </div>
+      <div class="form-field">
+        <label>Escalation Owner</label>
+        <select><option>Agent Smith (Me)</option><option>Lisa Park</option><option>Mike Davis</option></select>
       </div>
       <div class="form-field">
         <label>Description</label>
@@ -2031,6 +2033,48 @@
       <button class="btn btn-danger" onclick="resolveAm('denied')">❌ Deny</button>
       <button class="btn btn-accent" onclick="resolveAm('sf-pending')" style="background:linear-gradient(135deg,#0078d4,#50b3f0);">☁️ Approve → SF Pending</button>
       <button class="btn btn-accent" onclick="resolveAm('approved')" style="background:linear-gradient(135deg,#107c10,#50c050);">✅ Approve</button>
+    </div>
+  </div>
+</div>
+
+<!-- Assign Case Modal -->
+<div class="modal-overlay" id="modal-assignCase">
+  <div class="modal" style="width:600px;">
+    <div class="modal-header">
+      <span class="modal-title">📋 Assign Case to Agent</span>
+      <button class="modal-close" onclick="closeModal('assignCase')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:16px;">
+        💡 Select a case from the unassigned queue and choose an agent to assign it to.
+      </div>
+      <div class="form-field">
+        <label>Select Case to Assign</label>
+        <select id="assignCaseSelect">
+          <option value="">— Choose a case —</option>
+        </select>
+      </div>
+      <div id="assignCasePreview" style="display:none;background:var(--bg-main);border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Case Details</div>
+        <div id="assignCasePreviewBody"></div>
+      </div>
+      <div class="form-field">
+        <label>Assign To Agent</label>
+        <select id="assignAgentSelect">
+          <option value="">— Choose an agent —</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Assignment Notes (optional)</label>
+        <textarea id="assignNotes" placeholder="Add any instructions or context for the agent..."></textarea>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:10px;background:#f0f0ff;border-radius:8px;font-size:13px;">
+        <span>🟪</span> <span>Agent will be notified via Microsoft Teams when case is assigned.</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('assignCase')">Cancel</button>
+      <button class="btn btn-accent" onclick="submitCaseAssignment()">📋 Assign Case</button>
     </div>
   </div>
 </div>

@@ -30,14 +30,14 @@ const allCases = [
 ];
 
 const agents = [
-  { name: 'Lisa Park', initials: 'LP', title: 'Senior Agent', color: '#0078d4', cases: 8, escalations: 2, followups: 5, sla: '97%', online: true },
-  { name: 'Mike Davis', initials: 'MD', title: 'Agent', color: '#107c10', cases: 7, escalations: 2, followups: 4, sla: '94%', online: true },
-  { name: 'Agent Smith', initials: 'AS', title: 'Agent', color: '#8b2fc9', cases: 12, escalations: 4, followups: 9, sla: '89%', online: true },
-  { name: 'Jordan Price', initials: 'JP', title: 'Junior Agent', color: '#ff8c00', cases: 5, escalations: 1, followups: 3, sla: '85%', online: false },
-  { name: 'Samantha Cruz', initials: 'SC', title: 'Agent', color: '#d13438', cases: 6, escalations: 0, followups: 4, sla: '92%', online: true },
-  { name: 'Bryan Lee', initials: 'BL', title: 'Agent', color: '#038387', cases: 4, escalations: 1, followups: 2, sla: '91%', online: false },
-  { name: 'Angela Moore', initials: 'AM', title: 'Senior Agent', color: '#464eb8', cases: 9, escalations: 1, followups: 6, sla: '96%', online: true },
-  { name: 'Tyler Grant', initials: 'TG', title: 'Junior Agent', color: '#107c10', cases: 3, escalations: 0, followups: 2, sla: '88%', online: true },
+  { name: 'Lisa Park', initials: 'LP', title: 'Senior Agent', color: '#0078d4', cases: 8, escalations: 2, followups: 5, online: true },
+  { name: 'Mike Davis', initials: 'MD', title: 'Agent', color: '#107c10', cases: 7, escalations: 2, followups: 4, online: true },
+  { name: 'Agent Smith', initials: 'AS', title: 'Agent', color: '#8b2fc9', cases: 12, escalations: 4, followups: 9, online: true },
+  { name: 'Jordan Price', initials: 'JP', title: 'Junior Agent', color: '#ff8c00', cases: 5, escalations: 1, followups: 3, online: false },
+  { name: 'Samantha Cruz', initials: 'SC', title: 'Agent', color: '#d13438', cases: 6, escalations: 0, followups: 4, online: true },
+  { name: 'Bryan Lee', initials: 'BL', title: 'Agent', color: '#038387', cases: 4, escalations: 1, followups: 2, online: false },
+  { name: 'Angela Moore', initials: 'AM', title: 'Senior Agent', color: '#464eb8', cases: 9, escalations: 1, followups: 6, online: true },
+  { name: 'Tyler Grant', initials: 'TG', title: 'Junior Agent', color: '#107c10', cases: 3, escalations: 0, followups: 2, online: true },
 ];
 
 const calendarEvents = {
@@ -51,7 +51,6 @@ const calendarEvents = {
   ],
   '2025-6-24': [
     { label: 'S-201 Service Appt.', type: 'follow-up' },
-    { label: 'SLA Deadline: ESC-000009791', type: 'deadline' },
   ],
   '2025-6-25': [
     { label: 'Derek Osei Exec Review', type: 'escalation' },
@@ -130,6 +129,7 @@ function doLogin() {
   buildAgentList();
   buildAllCalendars();
   buildCalendar();
+  if (selectedRole === 'admin') buildUnassignedCases();
 
   // Init credits & AM approvals for all roles
   initCreditsAndAm();
@@ -158,6 +158,12 @@ function showPage(pageId) {
 
   // Rebuild calendar if needed
   if (pageId === 'calendar') buildCalendar();
+
+  // Rebuild admin page if needed
+  if (pageId === 'admin') {
+    buildAgentList();
+    buildUnassignedCases();
+  }
 
   // Rebuild credits page
   if (pageId === 'credits') {
@@ -272,7 +278,7 @@ function openCaseDetail(caseId) {
 function buildAgentList() {
   const container = document.getElementById('agentList');
   container.innerHTML = agents.map(a => `
-    <div class="user-row" onclick="showToast('Opening ${a.name}\\'s calendar...','success')">
+    <div class="user-row">
       <div class="avatar-wrap">
         <div class="user-row-avatar" style="background:${a.color};">${a.initials}</div>
         ${a.online ? `<div class="online-dot"></div>` : ''}
@@ -298,12 +304,9 @@ function buildAgentList() {
           <div class="user-row-stat-val" style="color:var(--warning);">${a.followups}</div>
           <div class="user-row-stat-label">Follow-Ups</div>
         </div>
-        <div class="user-row-stat">
-          <div class="user-row-stat-val" style="color:${parseFloat(a.sla)>=90?'var(--success)':'var(--warning)'};">${a.sla}</div>
-          <div class="user-row-stat-label">SLA</div>
-        </div>
       </div>
-      <div style="margin-left:8px;">
+      <div style="margin-left:8px;display:flex;gap:6px;">
+        <button class="btn btn-sm btn-accent" onclick="event.stopPropagation(); openAssignCase('${a.name}')">📋 Assign Case</button>
         <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); showPage('allcalendars')">📅 Calendar</button>
       </div>
     </div>
@@ -1036,4 +1039,136 @@ function filterCodeYellowMonth(period) {
   const el = document.getElementById('cyStatFiltered');
   if (el) el.textContent = counts[period] || 5;
   showToast('Code Yellow filter: ' + (labels[period] || period), 'success');
+}
+
+// ─── CASE ASSIGNMENT (ADMIN) ──────────────────────────────────────────────────
+
+// Unassigned cases pool - cases not yet assigned to a specific agent
+let unassignedCases = [
+  { id: 'CA-0000424201', customer: 'Kevin Brooks', sfId: 'SF-001244201', subject: 'Billing discrepancy – overcharge on last invoice', status: 'open', priority: 'high', updated: 'Today 8:45 AM' },
+  { id: 'CA-0000424187', customer: 'Denise Fuller', sfId: 'SF-001244187', subject: 'Service outage – no connectivity since yesterday', status: 'open', priority: 'high', updated: 'Today 7:30 AM' },
+  { id: 'CA-0000424155', customer: 'Marcus Webb', sfId: 'SF-001244155', subject: 'Equipment upgrade request – new router needed', status: 'pending', priority: 'medium', updated: 'Yesterday 5:10 PM' },
+  { id: 'CA-0000424130', customer: 'Tina Morales', sfId: 'SF-001244130', subject: 'Contract renewal question – pricing concern', status: 'open', priority: 'medium', updated: 'Yesterday 3:22 PM' },
+  { id: 'CA-0000424102', customer: 'Leon Patterson', sfId: 'SF-001244102', subject: 'Loyalty discount not applied – needs review', status: 'pending', priority: 'low', updated: 'Jun 21, 2025' },
+];
+
+function buildUnassignedCases() {
+  const tbody = document.getElementById('unassignedCasesBody');
+  const countEl = document.getElementById('unassignedCount');
+  if (!tbody) return;
+
+  if (countEl) countEl.textContent = unassignedCases.length + ' unassigned';
+
+  if (unassignedCases.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--success);font-weight:600;">✅ All cases have been assigned!</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = unassignedCases.map(c => `
+    <tr>
+      <td><span class="case-badge ca">${c.id}</span></td>
+      <td><strong>${c.customer}</strong><div style="font-size:11px;color:var(--text-secondary);">${c.sfId}</div></td>
+      <td style="font-size:13px;max-width:220px;">${c.subject}</td>
+      <td><span class="priority-badge ${c.priority}">${capitalize(c.priority)}</span></td>
+      <td><span class="status-badge ${c.status}">${capitalize(c.status)}</span></td>
+      <td>
+        <button class="btn btn-sm btn-accent" onclick="openAssignCase('', '${c.id}')">📋 Assign</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openAssignCase(agentName, caseId) {
+  // Populate the case select dropdown
+  const caseSelect = document.getElementById('assignCaseSelect');
+  if (caseSelect) {
+    caseSelect.innerHTML = '<option value="">— Choose a case —</option>' +
+      unassignedCases.map(c => `<option value="${c.id}">${c.id} – ${c.customer} (${capitalize(c.priority)} priority)</option>`).join('');
+    if (caseId) caseSelect.value = caseId;
+    caseSelect.onchange = function() { previewAssignCase(this.value); };
+    if (caseId) previewAssignCase(caseId);
+  }
+
+  // Populate the agent select dropdown
+  const agentSelect = document.getElementById('assignAgentSelect');
+  if (agentSelect) {
+    agentSelect.innerHTML = '<option value="">— Choose an agent —</option>' +
+      agents.map(a => {
+        const workload = a.cases + a.escalations;
+        const statusDot = a.online ? '🟢' : '⚫';
+        return `<option value="${a.name}" ${a.name === agentName ? 'selected' : ''}>${statusDot} ${a.name} (${a.title}) – ${a.cases} cases, ${a.escalations} ESC</option>`;
+      }).join('');
+  }
+
+  const notes = document.getElementById('assignNotes');
+  if (notes) notes.value = '';
+
+  openModal('assignCase');
+}
+
+function previewAssignCase(caseId) {
+  const preview = document.getElementById('assignCasePreview');
+  const previewBody = document.getElementById('assignCasePreviewBody');
+  if (!preview || !previewBody) return;
+
+  if (!caseId) {
+    preview.style.display = 'none';
+    return;
+  }
+
+  const c = unassignedCases.find(x => x.id === caseId);
+  if (!c) { preview.style.display = 'none'; return; }
+
+  previewBody.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div><div style="font-size:11px;color:var(--text-secondary);">Case #</div><div style="font-weight:600;">${c.id}</div></div>
+      <div><div style="font-size:11px;color:var(--text-secondary);">Customer</div><div style="font-weight:600;">${c.customer}</div></div>
+      <div><div style="font-size:11px;color:var(--text-secondary);">Priority</div><span class="priority-badge ${c.priority}">${capitalize(c.priority)}</span></div>
+      <div><div style="font-size:11px;color:var(--text-secondary);">Status</div><span class="status-badge ${c.status}">${capitalize(c.status)}</span></div>
+    </div>
+    <div style="margin-top:8px;font-size:13px;color:var(--text-secondary);">${c.subject}</div>
+  `;
+  preview.style.display = 'block';
+}
+
+function submitCaseAssignment() {
+  const caseId    = document.getElementById('assignCaseSelect')?.value;
+  const agentName = document.getElementById('assignAgentSelect')?.value;
+  const notes     = document.getElementById('assignNotes')?.value;
+
+  if (!caseId) { showToast('Please select a case to assign.', 'danger'); return; }
+  if (!agentName) { showToast('Please select an agent.', 'danger'); return; }
+
+  const c = unassignedCases.find(x => x.id === caseId);
+  if (!c) return;
+
+  // Add to allCases with assigned agent
+  allCases.unshift({
+    id: c.id,
+    customer: c.customer,
+    sfId: c.sfId,
+    subject: c.subject,
+    status: c.status,
+    priority: c.priority,
+    agent: agentName,
+    updated: 'Just now'
+  });
+
+  // Update agent case count
+  const agent = agents.find(a => a.name === agentName);
+  if (agent) agent.cases += 1;
+
+  // Remove from unassigned queue
+  unassignedCases = unassignedCases.filter(x => x.id !== caseId);
+
+  closeModal('assignCase');
+  showToast(`✅ ${caseId} assigned to ${agentName}! They've been notified via Teams.`, 'success');
+
+  // Rebuild all affected views
+  buildUnassignedCases();
+  buildAgentList();
+  buildCasesTable(allCases);
+
+  // Update nav badge
+  const unassignedBadgeVal = unassignedCases.length;
 }
