@@ -564,12 +564,12 @@ window.addEventListener('load', function() {
 });// ─── CREDITS & AM APPROVALS ──────────────────────────────────────────────────
 
 let creditRequests = [
-  { id: 'CR-00081', customer: 'Maria Gonzalez', caseRef: 'CA-0000423891', amount: 45.00, type: 'Billing Error', reason: 'Duplicate charge applied on June billing cycle. Customer disputed and verified.', submittedBy: 'Agent Smith', date: 'Today 9:15 AM', status: 'pending', sfStatus: '—' },
-  { id: 'CR-00080', customer: 'James Thornton', caseRef: 'CA-0000423742', amount: 25.00, type: 'Service Outage', reason: 'Service was down for 3 days. Customer requested compensation.', submittedBy: 'Agent Smith', date: 'Yesterday', status: 'sf-pending', sfStatus: 'Pending Sync' },
-  { id: 'CR-00079', customer: 'Patricia Lam', caseRef: 'ESC-000009791', amount: 75.00, type: 'Retention Offer', reason: 'Customer threatening to cancel. Offered credit to retain.', submittedBy: 'Lisa Park', date: 'Jun 20, 2025', status: 'approved', sfStatus: 'Applied' },
-  { id: 'CR-00078', customer: 'Derek Osei', caseRef: 'ESC-000009745', amount: 120.00, type: 'Goodwill Credit', reason: 'Multiple tech failures. Executive complaint. Credit approved as goodwill.', submittedBy: 'Mike Davis', date: 'Jun 19, 2025', status: 'approved', sfStatus: 'Applied' },
-  { id: 'CR-00077', customer: 'Helen Vargas', caseRef: 'CA-0000422801', amount: 30.00, type: 'Billing Error', reason: 'Customer charged incorrect rate for 2 months.', submittedBy: 'Agent Smith', date: 'Jun 18, 2025', status: 'denied', sfStatus: '—' },
-  { id: 'CR-00076', customer: 'Sandra Okafor', caseRef: 'CA-0000423301', amount: 20.00, type: 'Equipment Issue', reason: 'Equipment delayed. Customer inconvenienced.', submittedBy: 'Angela Moore', date: 'Jun 17, 2025', status: 'pending', sfStatus: '—' },
+  { id: 'CRE-10081', customer: 'Maria Gonzalez', caseRef: 'CA-0000423891', amount: 45.00, type: 'Billing Error', reason: 'Duplicate charge applied on June billing cycle. Customer disputed and verified.', submittedBy: 'Agent Smith', date: 'Today 9:15 AM', status: 'pending', sfStatus: '—' },
+  { id: 'CRE-10080', customer: 'James Thornton', caseRef: 'CA-0000423742', amount: 25.00, type: 'Service Outage', reason: 'Service was down for 3 days. Customer requested compensation.', submittedBy: 'Agent Smith', date: 'Yesterday', status: 'sf-pending', sfStatus: 'Pending Sync' },
+  { id: 'CRE-10079', customer: 'Patricia Lam', caseRef: 'ESC-000009791', amount: 75.00, type: 'Retention Offer', reason: 'Customer threatening to cancel. Offered credit to retain.', submittedBy: 'Lisa Park', date: 'Jun 20, 2025', status: 'approved', sfStatus: 'Applied' },
+  { id: 'CRE-10078', customer: 'Derek Osei', caseRef: 'ESC-000009745', amount: 120.00, type: 'Goodwill Credit', reason: 'Multiple tech failures. Executive complaint. Credit approved as goodwill.', submittedBy: 'Mike Davis', date: 'Jun 19, 2025', status: 'approved', sfStatus: 'Applied' },
+  { id: 'CRE-10077', customer: 'Helen Vargas', caseRef: 'CA-0000422801', amount: 30.00, type: 'Billing Error', reason: 'Customer charged incorrect rate for 2 months.', submittedBy: 'Agent Smith', date: 'Jun 18, 2025', status: 'denied', sfStatus: '—' },
+  { id: 'CRE-10076', customer: 'Sandra Okafor', caseRef: 'CA-0000423301', amount: 20.00, type: 'Equipment Issue', reason: 'Equipment delayed. Customer inconvenienced.', submittedBy: 'Angela Moore', date: 'Jun 17, 2025', status: 'pending', sfStatus: '—' },
 ];
 
 let amApprovals = [
@@ -723,7 +723,7 @@ function submitCreditRequest() {
   const type     = document.getElementById('creditType').value;
   const reason   = document.getElementById('creditReason').value;
   if (!customer || !amount || !reason) { showToast('Please fill in all required fields.', 'danger'); return; }
-  const newId = 'CR-000' + (82 + creditRequests.length);
+  const newId = 'CRE-1' + String(82 + creditRequests.length).padStart(4, '0');
   creditRequests.unshift({
     id: newId, customer, caseRef: caseRef || '—', amount, type, reason,
     submittedBy: currentUser.name,
@@ -1008,4 +1008,18 @@ function initCreditsAndAm() {
     const adminRow = document.getElementById('adminCreditAmRow');
     if (adminRow) adminRow.style.display = 'grid';
   }
+}
+// ─── CODE YELLOW MONTH FILTER ────────────────────────────────────────────────
+
+function filterCodeYellowMonth(period) {
+  const labels = {
+    'current': 'This Month',
+    'last': 'Last Month',
+    '2months': '2 Months Ago',
+    'all': 'All Time'
+  };
+  const counts = { 'current': 5, 'last': 7, '2months': 4, 'all': 8 };
+  const el = document.getElementById('cyStatFiltered');
+  if (el) el.textContent = counts[period] || 5;
+  showToast('Code Yellow filter: ' + (labels[period] || period), 'success');
 }

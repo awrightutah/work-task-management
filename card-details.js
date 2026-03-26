@@ -263,22 +263,22 @@ const cardDetailData = {
   'creditsPending': {
     title: '⏳ Pending Credit Approvals',
     items: [
-      { id: 'CR-00081', customer: 'Maria Gonzalez', subject: 'Billing Error - $45.00 | Duplicate charge Jun cycle', status: 'pending', priority: 'medium' },
-      { id: 'CR-00076', customer: 'Sandra Okafor', subject: 'Equipment Issue - $20.00 | Equipment delivery delay', status: 'pending', priority: 'low' },
+      { id: 'CRE-10081', customer: 'Maria Gonzalez', subject: 'Billing Error - $45.00 | Duplicate charge Jun cycle', status: 'pending', priority: 'medium' },
+      { id: 'CRE-10076', customer: 'Sandra Okafor', subject: 'Equipment Issue - $20.00 | Equipment delivery delay', status: 'pending', priority: 'low' },
     ]
   },
   'creditsApproved': {
     title: '✅ Approved Credit Requests',
     items: [
-      { id: 'CR-00080', customer: 'James Thornton', subject: 'Service Outage - $25.00 | SF Pending Sync', status: 'scheduled', priority: 'medium' },
-      { id: 'CR-00079', customer: 'Patricia Lam', subject: 'Retention Offer - $75.00 | Applied in Salesforce', status: 'resolved', priority: 'high' },
-      { id: 'CR-00078', customer: 'Derek Osei', subject: 'Goodwill Credit - $120.00 | Applied in Salesforce', status: 'resolved', priority: 'high' },
+      { id: 'CRE-10080', customer: 'James Thornton', subject: 'Service Outage - $25.00 | SF Pending Sync', status: 'scheduled', priority: 'medium' },
+      { id: 'CRE-10079', customer: 'Patricia Lam', subject: 'Retention Offer - $75.00 | Applied in Salesforce', status: 'resolved', priority: 'high' },
+      { id: 'CRE-10078', customer: 'Derek Osei', subject: 'Goodwill Credit - $120.00 | Applied in Salesforce', status: 'resolved', priority: 'high' },
     ]
   },
   'creditsDenied': {
     title: '❌ Denied Credit Requests',
     items: [
-      { id: 'CR-00077', customer: 'Helen Vargas', subject: 'Billing Error - $30.00 | Denied by supervisor', status: 'closed', priority: 'low' },
+      { id: 'CRE-10077', customer: 'Helen Vargas', subject: 'Billing Error - $30.00 | Denied by supervisor', status: 'closed', priority: 'low' },
     ]
   },
   'creditsTotalMonth': {
@@ -316,6 +316,39 @@ const cardDetailData = {
     title: '☁️ AM Approvals - SF Pending Sync',
     items: [
       { id: 'AM-00051', customer: 'Derek Osei', subject: 'Discount Override | 15% loyalty discount - pending Salesforce sync', status: 'scheduled', priority: 'medium' },
+    ]
+  }
+,
+
+  // Code Yellow new stat cards
+  'codeYellowsSubmitted': {
+    title: '🟡 Code Yellows Submitted This Month',
+    items: [
+      { id: 'CA-0000423891', customer: 'Maria Gonzalez', subject: 'Moving - wants to cancel service', status: 'warning', priority: 'high' },
+      { id: 'CA-0000423742', customer: 'James Thornton', subject: 'Price complaint - found cheaper competitor', status: 'warning', priority: 'medium' },
+      { id: 'ESC-000009791', customer: 'Patricia Lam', subject: 'Repeated service failures - frustrated', status: 'escalated', priority: 'high' },
+      { id: 'CA-0000424102', customer: 'Sandra Okafor', subject: 'Not happy with response times', status: 'pending', priority: 'medium' },
+      { id: 'CA-0000422801', customer: 'Helen Vargas', subject: 'Billing confusion - considering switching', status: 'open', priority: 'low' },
+      { id: 'CA-0000422650', customer: 'Thomas Nguyen', subject: 'Considering cancellation - price increase', status: 'at-risk', priority: 'medium' },
+      { id: 'CA-0000422490', customer: 'Aisha Patel', subject: 'Cancellation threat during call', status: 'at-risk', priority: 'high' },
+      { id: 'CA-0000422310', customer: 'Marcus Webb', subject: 'Service dissatisfaction - evaluating competitors', status: 'at-risk', priority: 'medium' },
+    ]
+  },
+  'codeYellowFiltered': {
+    title: '📅 Code Yellows - Filtered by Month',
+    items: [
+      { id: 'CA-0000423891', customer: 'Maria Gonzalez', subject: 'Moving - wants to cancel service', status: 'warning', priority: 'high' },
+      { id: 'CA-0000423742', customer: 'James Thornton', subject: 'Price complaint - found cheaper competitor', status: 'warning', priority: 'medium' },
+      { id: 'ESC-000009791', customer: 'Patricia Lam', subject: 'Repeated service failures - frustrated', status: 'escalated', priority: 'high' },
+      { id: 'CA-0000424102', customer: 'Sandra Okafor', subject: 'Not happy with response times', status: 'pending', priority: 'medium' },
+      { id: 'CA-0000422801', customer: 'Helen Vargas', subject: 'Billing confusion - considering switching', status: 'open', priority: 'low' },
+    ]
+  },
+  'codeYellowFailed': {
+    title: '❌ Failed Code Yellows (Not Retained)',
+    items: [
+      { id: 'CA-0000422200', customer: 'Robert Kim', subject: 'Cancellation processed - retention offer declined', status: 'closed', priority: 'high' },
+      { id: 'CA-0000421850', customer: 'Derek Osei', subject: 'Service cancelled - customer moved to competitor', status: 'closed', priority: 'high' },
     ]
   }
 };
@@ -393,7 +426,7 @@ function showCardDetail(cardType) {
       <tbody>
         ${data.items.map(item => `
           <tr style="border-bottom:1px solid var(--border);cursor:pointer;" onclick="handleCardItemClick('${item.id || ''}', '${cardType}')">
-            <td style="padding:10px;"><span class="case-badge ${item.id?.startsWith('ESC') ? 'esc' : item.id?.startsWith('S-') ? 'srv' : item.id?.startsWith('CR-') ? 'cr' : item.id?.startsWith('AM-') ? 'am' : 'ca'}">${item.id || '-'}</span></td>
+            <td style="padding:10px;"><span class="case-badge ${item.id?.startsWith('ESC') ? 'esc' : item.id?.startsWith('S-') ? 'srv' : item.id?.startsWith('CRE-') ? 'cr' : item.id?.startsWith('AM-') ? 'am' : 'ca'}">${item.id || '-'}</span></td>
             <td style="padding:10px;font-weight:600;">${item.customer || '-'}</td>
             <td style="padding:10px;font-size:13px;color:var(--text-secondary);">${item.subject || item.reason || item.time || '-'}</td>
             <td style="padding:10px;text-align:center;"><span class="status-badge ${item.status || 'open'}">${capitalizeStatus(item.status || 'open')}</span></td>
@@ -428,7 +461,7 @@ function handleCardItemClick(id, cardType) {
     closeModal('cardDetail');
     showPage('followups');
     showToast(`Viewing follow-up ${id}`, 'success');
-  } else if (id.startsWith('CR-')) {
+  } else if (id.startsWith('CRE-')) {
     closeModal('cardDetail');
     showPage('credits');
     showToast(`Viewing credit request ${id}`, 'success');

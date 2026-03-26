@@ -1139,14 +1139,18 @@
             <div class="page-subtitle">Customers at risk of cancellation requiring retention outreach</div>
           </div>
         </div>
-        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
-          <div class="stat-card code-yellow" onclick="showCardDetail('atRiskAccounts')" style="cursor:pointer;">
-            <div class="stat-top"><div><div class="stat-value">5</div><div class="stat-label">At-Risk Accounts</div></div><div class="stat-icon code-yellow">🟡</div></div>
-            <div class="stat-change down">Retention action needed</div>
+        <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="stat-card code-yellow" onclick="showCardDetail('codeYellowsSubmitted')" style="cursor:pointer;">
+            <div class="stat-top"><div><div class="stat-value" id="cyStatSubmitted">8</div><div class="stat-label">Code Yellows Submitted</div></div><div class="stat-icon code-yellow">🟡</div></div>
+            <div class="stat-change down">Total submitted this month</div>
           </div>
-          <div class="stat-card orange" onclick="showCardDetail('revenueAtRisk')" style="cursor:pointer;">
-            <div class="stat-top"><div><div class="stat-value">$2,528</div><div class="stat-label">Revenue at Risk</div></div><div class="stat-icon orange">💰</div></div>
-            <div class="stat-change down">Avg. $42.14/mo contract</div>
+          <div class="stat-card blue" onclick="showCardDetail('codeYellowFiltered')" style="cursor:pointer;">
+            <div class="stat-top"><div><div class="stat-value" id="cyStatFiltered">5</div><div class="stat-label">Filtered by Month</div></div><div class="stat-icon blue">📅</div></div>
+            <div style="padding:0 12px 12px;"><select id="cyMonthFilter" class="btn btn-ghost btn-sm" style="width:100%;font-size:11px;" onchange="filterCodeYellowMonth(this.value)" onclick="event.stopPropagation()"><option value="current">This Month</option><option value="last">Last Month</option><option value="2months">2 Months Ago</option><option value="all">All Time</option></select></div>
+          </div>
+          <div class="stat-card red" onclick="showCardDetail('codeYellowFailed')" style="cursor:pointer;">
+            <div class="stat-top"><div><div class="stat-value" id="cyStatFailed">2</div><div class="stat-label">Failed Code Yellows</div></div><div class="stat-icon red">❌</div></div>
+            <div class="stat-change down">Cancellations not retained</div>
           </div>
           <div class="stat-card green" onclick="showCardDetail('retainedThisWeek')" style="cursor:pointer;">
             <div class="stat-top"><div><div class="stat-value">3</div><div class="stat-label">Retained This Week</div></div><div class="stat-icon green">✅</div></div>
