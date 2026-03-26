@@ -433,7 +433,7 @@ body {
 /* ============ STATS CARDS ============ */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-bottom: 24px;
 }
@@ -983,6 +983,43 @@ tbody td { padding: 12px 16px; color: var(--text-primary); }
 /* Salesforce connect colors */
 .sf-connected { color: #00a1e0; font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 4px; }
 .teams-connected { color: #6264a7; font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+
+/* ============================================================
+   CODE RED / CODE YELLOW STAT CARDS
+============================================================ */
+.stat-card.code-red {
+  background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+  color: white;
+  border: none;
+}
+.stat-card.code-red .stat-label,
+.stat-card.code-red .stat-change {
+  color: rgba(255,255,255,0.85);
+}
+.stat-card.code-red .stat-value {
+  color: #ffffff;
+}
+.stat-icon.code-red {
+  background: rgba(255,255,255,0.2);
+  font-size: 22px;
+}
+
+.stat-card.code-yellow {
+  background: linear-gradient(135deg, #ffaa00 0%, #e67e00 100%);
+  color: white;
+  border: none;
+}
+.stat-card.code-yellow .stat-label,
+.stat-card.code-yellow .stat-change {
+  color: rgba(255,255,255,0.85);
+}
+.stat-card.code-yellow .stat-value {
+  color: #ffffff;
+}
+.stat-icon.code-yellow {
+  background: rgba(255,255,255,0.2);
+  font-size: 22px;
+}
 
 /* ============================================================
    CREDITS & AM APPROVALS

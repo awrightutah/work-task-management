@@ -122,6 +122,25 @@
       <div class="nav-item" onclick="showPage('customers')" id="nav-customers">
         <span class="nav-icon">☁️</span> Salesforce Contacts
       </div>
+      <div class="nav-item" onclick="showPage('credits')" id="nav-credits">
+        <span class="nav-icon">💲</span> Credit Requests
+        <span class="nav-badge orange" id="creditNavBadge">2</span>
+      </div>
+      <div class="nav-item" onclick="showPage('amapprovals')" id="nav-amapprovals">
+        <span class="nav-icon">✍️</span> AM Approvals
+        <span class="nav-badge orange" id="amNavBadge">3</span>
+      </div>
+
+      <div class="sidebar-divider"></div>
+      <div class="nav-section-title">Alerts</div>
+      <div class="nav-item" onclick="showPage('coderedpage')" id="nav-coderedpage">
+        <span class="nav-icon">🔴</span> Code Red
+        <span class="nav-badge red" id="codeRedNavBadge">4</span>
+      </div>
+      <div class="nav-item" onclick="showPage('codeyellowpage')" id="nav-codeyellowpage">
+        <span class="nav-icon">🟡</span> Code Yellow
+        <span class="nav-badge orange" id="codeYellowNavBadge">5</span>
+      </div>
 
       <div class="sidebar-divider"></div>
       <div class="nav-section-title" id="adminSectionTitle" style="display:none">Admin Tools</div>
@@ -202,6 +221,26 @@
               <div class="stat-icon teal">🔧</div>
             </div>
             <div class="stat-change up">↑ 5 in progress</div>
+          </div>
+          <div class="stat-card code-red" onclick="showCardDetail('codeRed')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div>
+                <div class="stat-value">4</div>
+                <div class="stat-label">Code Red</div>
+              </div>
+              <div class="stat-icon code-red">🔴</div>
+            </div>
+            <div class="stat-change down">Critical cases requiring immediate action</div>
+          </div>
+          <div class="stat-card code-yellow" onclick="showCardDetail('codeYellow')" style="cursor:pointer;">
+            <div class="stat-top">
+              <div>
+                <div class="stat-value">5</div>
+                <div class="stat-label">Code Yellow</div>
+              </div>
+              <div class="stat-icon code-yellow">🟡</div>
+            </div>
+            <div class="stat-change down">Cancellations at risk</div>
           </div>
         </div>
 
@@ -391,6 +430,65 @@
             </div>
           </div>
         </div>
+
+        <!-- Credit Requests & AM Approvals Quick Lists (Agent Dashboard) -->
+        <div class="two-col" id="dashCreditAmRow">
+          <!-- My Credit Requests -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">💲 My Credit Requests</span>
+              <button class="btn btn-ghost btn-sm" onclick="showPage('credits')">View All</button>
+            </div>
+            <div class="card-body" style="padding-top:8px;" id="dashCreditList">
+              <div style="text-align:center;color:var(--text-secondary);font-size:13px;padding:12px;">Loading...</div>
+            </div>
+            <div style="padding:8px 16px 12px;">
+              <button class="btn btn-accent btn-sm" style="width:100%;" onclick="openModal('newCredit')">+ New Credit Request</button>
+            </div>
+          </div>
+
+          <!-- My AM Approvals -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">✍️ My AM Approvals</span>
+              <button class="btn btn-ghost btn-sm" onclick="showPage('amapprovals')">View All</button>
+            </div>
+            <div class="card-body" style="padding-top:8px;" id="dashAmList">
+              <div style="text-align:center;color:var(--text-secondary);font-size:13px;padding:12px;">Loading...</div>
+            </div>
+            <div style="padding:8px 16px 12px;">
+              <button class="btn btn-accent btn-sm" style="width:100%;background:linear-gradient(135deg,#8b2fc9,#b060ff);" onclick="openModal('newAmApproval')">+ New AM Approval</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Pending Review Row (hidden for agents) -->
+        <div class="two-col" id="adminCreditAmRow" style="display:none;">
+          <!-- Pending Credits (Admin) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">💲 Pending Credit Approvals</span>
+              <span style="font-size:12px;color:var(--warning);font-weight:700;" id="adminCreditCount">2 pending</span>
+              <button class="btn btn-ghost btn-sm" onclick="showPage('credits')" style="margin-left:auto;">View All</button>
+            </div>
+            <div class="card-body" style="padding-top:8px;" id="adminDashCreditList">
+              <div style="text-align:center;color:var(--text-secondary);font-size:13px;padding:12px;">Loading...</div>
+            </div>
+          </div>
+
+          <!-- Pending AM Approvals (Admin) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">✍️ Pending AM Approvals</span>
+              <span style="font-size:12px;color:#8b2fc9;font-weight:700;" id="adminAmCount">3 pending</span>
+              <button class="btn btn-ghost btn-sm" onclick="showPage('amapprovals')" style="margin-left:auto;">View All</button>
+            </div>
+            <div class="card-body" style="padding-top:8px;" id="adminDashAmList">
+              <div style="text-align:center;color:var(--text-secondary);font-size:13px;padding:12px;">Loading...</div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- ========== CASES PAGE ========== -->
@@ -950,6 +1048,305 @@
         </div>
       </div>
 
+      <!-- ========== CODE RED PAGE ========== -->
+      <div class="page" id="page-coderedpage">
+        <div class="page-header">
+          <div>
+            <div class="page-title">🔴 Code Red – Critical Cases</div>
+            <div class="page-subtitle">Customers requiring immediate escalation attention</div>
+          </div>
+        </div>
+        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card code-red">
+            <div class="stat-top"><div><div class="stat-value">4</div><div class="stat-label">Active Code Reds</div></div><div class="stat-icon code-red">🔴</div></div>
+            <div class="stat-change down">Immediate action needed</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-top"><div><div class="stat-value">2</div><div class="stat-label">Contacted Today</div></div><div class="stat-icon orange">📞</div></div>
+            <div class="stat-change up">↑ 1 from yesterday</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-top"><div><div class="stat-value">6</div><div class="stat-label">Resolved This Week</div></div><div class="stat-icon green">✅</div></div>
+            <div class="stat-change up">↑ 3 from last week</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🔴 Code Red Active Cases</span>
+            <button class="btn btn-ghost btn-sm" onclick="showPage('escalations')">View Escalations</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Case #</th>
+                  <th>Customer</th>
+                  <th>Issue</th>
+                  <th>Assigned To</th>
+                  <th>Days Open</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="case-badge esc">ESC-000009791</span></td>
+                  <td><strong>Patricia Lam</strong></td>
+                  <td>System offline 5+ days — threatening legal action</td>
+                  <td>Agent Smith</td>
+                  <td><span style="color:#d13438;font-weight:700;">5</span></td>
+                  <td><span class="status-badge escalated">Critical</span></td>
+                  <td><button class="btn btn-sm btn-accent" style="background:linear-gradient(135deg,#d13438,#ff6b6b);">Contact Now</button></td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge esc">ESC-000009745</span></td>
+                  <td><strong>Derek Osei</strong></td>
+                  <td>Multiple equipment failures — executive complaint filed</td>
+                  <td>Mike Davis</td>
+                  <td><span style="color:#d13438;font-weight:700;">3</span></td>
+                  <td><span class="status-badge escalated">Critical</span></td>
+                  <td><button class="btn btn-sm btn-accent" style="background:linear-gradient(135deg,#d13438,#ff6b6b);">Contact Now</button></td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge ca">CA-0000423891</span></td>
+                  <td><strong>Maria Gonzalez</strong></td>
+                  <td>Billing dispute unresolved after 3 escalations</td>
+                  <td>Agent Smith</td>
+                  <td><span style="color:#ff8c00;font-weight:700;">2</span></td>
+                  <td><span class="status-badge escalated">Critical</span></td>
+                  <td><button class="btn btn-sm btn-accent" style="background:linear-gradient(135deg,#d13438,#ff6b6b);">Contact Now</button></td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge esc">ESC-000009803</span></td>
+                  <td><strong>Thomas Nguyen</strong></td>
+                  <td>Contract dispute — wants immediate supervisor call</td>
+                  <td>Lisa Park</td>
+                  <td><span style="color:#ff8c00;font-weight:700;">1</span></td>
+                  <td><span class="status-badge open">Urgent</span></td>
+                  <td><button class="btn btn-sm btn-accent" style="background:linear-gradient(135deg,#d13438,#ff6b6b);">Contact Now</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== CODE YELLOW PAGE ========== -->
+      <div class="page" id="page-codeyellowpage">
+        <div class="page-header">
+          <div>
+            <div class="page-title">🟡 Code Yellow – Cancellations</div>
+            <div class="page-subtitle">Customers at risk of cancellation requiring retention outreach</div>
+          </div>
+        </div>
+        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card code-yellow">
+            <div class="stat-top"><div><div class="stat-value">5</div><div class="stat-label">At-Risk Accounts</div></div><div class="stat-icon code-yellow">🟡</div></div>
+            <div class="stat-change down">Retention action needed</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-top"><div><div class="stat-value">$2,528</div><div class="stat-label">Revenue at Risk</div></div><div class="stat-icon orange">💰</div></div>
+            <div class="stat-change down">Avg. $42.14/mo contract</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-top"><div><div class="stat-value">3</div><div class="stat-label">Retained This Week</div></div><div class="stat-icon green">✅</div></div>
+            <div class="stat-change up">↑ 2 from last week</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🟡 Cancellation Risk Accounts</span>
+            <button class="btn btn-ghost btn-sm" onclick="openModal('newAmApproval')">+ Retention AM Request</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Case #</th>
+                  <th>Customer</th>
+                  <th>Cancellation Reason</th>
+                  <th>Contract Value</th>
+                  <th>Assigned To</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="case-badge ca">CA-0000423891</span></td>
+                  <td><strong>Maria Gonzalez</strong></td>
+                  <td>Moving — wants to cancel service</td>
+                  <td style="font-weight:700;color:#d13438;">$2,528.40</td>
+                  <td>Agent Smith</td>
+                  <td><span class="status-badge escalated">High Risk</span></td>
+                  <td><button class="btn btn-sm btn-accent" style="background:linear-gradient(135deg,#ff8c00,#ffb347);">Retention Call</button></td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge ca">CA-0000423742</span></td>
+                  <td><strong>James Thornton</strong></td>
+                  <td>Price complaint — found cheaper competitor</td>
+                  <td style="font-weight:700;color:#d13438;">$1,895.20</td>
+                  <td>Agent Smith</td>
+                  <td><span class="status-badge pending">Medium Risk</span></td>
+                  <td><button class="btn btn-sm btn-accent" style="background:linear-gradient(135deg,#ff8c00,#ffb347);">Retention Call</button></td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge esc">ESC-000009791</span></td>
+                  <td><strong>Patricia Lam</strong></td>
+                  <td>Repeated service failures — frustrated</td>
+                  <td style="font-weight:700;color:#d13438;">$3,050.80</td>
+                  <td>Lisa Park</td>
+                  <td><span class="status-badge escalated">High Risk</span></td>
+                  <td><button class="btn btn-sm btn-accent" style="background:linear-gradient(135deg,#ff8c00,#ffb347);">Retention Call</button></td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge ca">CA-0000424102</span></td>
+                  <td><strong>Sandra Okafor</strong></td>
+                  <td>Not happy with response times</td>
+                  <td style="font-weight:700;color:#ff8c00;">$1,264.20</td>
+                  <td>Angela Moore</td>
+                  <td><span class="status-badge pending">Medium Risk</span></td>
+                  <td><button class="btn btn-sm btn-accent" style="background:linear-gradient(135deg,#ff8c00,#ffb347);">Retention Call</button></td>
+                </tr>
+                <tr>
+                  <td><span class="case-badge ca">CA-0000422801</span></td>
+                  <td><strong>Helen Vargas</strong></td>
+                  <td>Billing confusion — considering switching</td>
+                  <td style="font-weight:700;color:#ff8c00;">$1,012.80</td>
+                  <td>Agent Smith</td>
+                  <td><span class="status-badge open">Low Risk</span></td>
+                  <td><button class="btn btn-sm btn-accent" style="background:linear-gradient(135deg,#ff8c00,#ffb347);">Retention Call</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== CREDIT REQUESTS PAGE ========== -->
+      <div class="page" id="page-credits">
+        <div class="page-header">
+          <div>
+            <div class="page-title">💲 Credit Requests</div>
+            <div class="page-subtitle">Submit and track dollar credits applied to customer accounts</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button class="btn btn-outline" id="creditViewToggleBtn" onclick="toggleCreditView()">👥 View Team Requests</button>
+            <button class="btn btn-accent" onclick="openModal('newCredit')">+ Submit Credit Request</button>
+          </div>
+        </div>
+        <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="stat-card orange">
+            <div class="stat-top"><div><div class="stat-value" id="creditStatPending">0</div><div class="stat-label">Pending Approval</div></div><div class="stat-icon orange">⏳</div></div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-top"><div><div class="stat-value" id="creditStatApproved">0</div><div class="stat-label">Approved</div></div><div class="stat-icon green">✅</div></div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-top"><div><div class="stat-value" id="creditStatDenied">0</div><div class="stat-label">Denied</div></div><div class="stat-icon red">❌</div></div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-top"><div><div class="stat-value" id="creditStatTotal">$0</div><div class="stat-label">Total Approved (Month)</div></div><div class="stat-icon blue">💰</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title" id="creditTableTitle">My Credit Requests</span>
+            <div style="display:flex;gap:8px;">
+              <select class="btn btn-ghost btn-sm" style="cursor:pointer;" onchange="filterCredits(this.value)">
+                <option value="all">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="denied">Denied</option>
+                <option value="sf-pending">SF Pending</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Request #</th>
+                  <th>Customer</th>
+                  <th>Case / ESC</th>
+                  <th>Credit Amount</th>
+                  <th>Reason</th>
+                  <th>Submitted By</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>SF Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="creditTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== AM APPROVALS PAGE ========== -->
+      <div class="page" id="page-amapprovals">
+        <div class="page-header">
+          <div>
+            <div class="page-title">✍️ AM Approvals</div>
+            <div class="page-subtitle">Submit requests requiring Associate Manager approval</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button class="btn btn-outline" id="amViewToggleBtn" onclick="toggleAmView()">👥 View Team Requests</button>
+            <button class="btn btn-accent" onclick="openModal('newAmApproval')" style="background:linear-gradient(135deg,#8b2fc9,#b060ff);">+ Submit AM Approval</button>
+          </div>
+        </div>
+        <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="stat-card orange">
+            <div class="stat-top"><div><div class="stat-value" id="amStatPending">0</div><div class="stat-label">Pending AM Review</div></div><div class="stat-icon orange">⏳</div></div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-top"><div><div class="stat-value" id="amStatApproved">0</div><div class="stat-label">Approved</div></div><div class="stat-icon green">✅</div></div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-top"><div><div class="stat-value" id="amStatDenied">0</div><div class="stat-label">Denied</div></div><div class="stat-icon red">❌</div></div>
+          </div>
+          <div class="stat-card purple">
+            <div class="stat-top"><div><div class="stat-value" id="amStatSfPending">0</div><div class="stat-label">SF Pending Sync</div></div><div class="stat-icon purple">☁️</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title" id="amTableTitle">My AM Approval Requests</span>
+            <div style="display:flex;gap:8px;">
+              <select class="btn btn-ghost btn-sm" style="cursor:pointer;" onchange="filterAmApprovals(this.value)">
+                <option value="all">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="denied">Denied</option>
+                <option value="sf-pending">SF Pending</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Request #</th>
+                  <th>Customer</th>
+                  <th>Case / ESC</th>
+                  <th>Approval Type</th>
+                  <th>Details</th>
+                  <th>Submitted By</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>SF Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="amTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- ========== ADMIN – TEAM OVERVIEW ========== -->
       <div class="page" id="page-admin">
         <div class="page-header">
@@ -1468,6 +1865,159 @@
     <div class="modal-body" id="cardDetailBody" style="max-height:60vh;overflow-y:auto;"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('cardDetail')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Credit Request Modal -->
+<div class="modal-overlay" id="modal-newCredit">
+  <div class="modal" style="width:580px;">
+    <div class="modal-header">
+      <span class="modal-title">💲 Submit Credit Request</span>
+      <button class="modal-close" onclick="closeModal('newCredit')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#fff8e1;border:1px solid #ffcc02;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:16px;">
+        ⚠️ Credit requests will be sent to your supervisor for approval before being applied in Salesforce.
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Customer (Salesforce Lookup)</label>
+          <input type="text" id="creditCustomer" placeholder="Search customer name..." />
+        </div>
+        <div class="form-field">
+          <label>Credit Amount ($)</label>
+          <input type="number" id="creditAmount" placeholder="0.00" min="0" step="0.01" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Linked Case / ESC / Service</label>
+          <input type="text" id="creditCaseRef" placeholder="CA-xxxxxxxxxx, ESC-xxxxxxxxx, S-xxx" />
+        </div>
+        <div class="form-field">
+          <label>Credit Type</label>
+          <select id="creditType">
+            <option>Billing Error</option>
+            <option>Service Outage</option>
+            <option>Retention Offer</option>
+            <option>Equipment Issue</option>
+            <option>Goodwill Credit</option>
+            <option>Duplicate Charge</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Reason / Justification</label>
+        <textarea id="creditReason" placeholder="Explain why this credit should be applied..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('newCredit')">Cancel</button>
+      <button class="btn btn-accent" onclick="submitCreditRequest()">💲 Submit for Approval</button>
+    </div>
+  </div>
+</div>
+
+<!-- New AM Approval Modal -->
+<div class="modal-overlay" id="modal-newAmApproval">
+  <div class="modal" style="width:580px;">
+    <div class="modal-header">
+      <span class="modal-title">✍️ Submit AM Approval Request</span>
+      <button class="modal-close" onclick="closeModal('newAmApproval')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#f3e5f5;border:1px solid #ce93d8;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:16px;">
+        📋 This request will be routed to your Associate Manager for review and approval.
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Customer (Salesforce Lookup)</label>
+          <input type="text" id="amCustomer" placeholder="Search customer name..." />
+        </div>
+        <div class="form-field">
+          <label>Approval Type</label>
+          <select id="amApprovalType">
+            <option>Contract Exception</option>
+            <option>Early Termination Waiver</option>
+            <option>Rate Lock Override</option>
+            <option>Service Plan Change</option>
+            <option>Retention Exception</option>
+            <option>Discount Override</option>
+            <option>Refund Request</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Linked Case / ESC / Service</label>
+          <input type="text" id="amCaseRef" placeholder="CA-xxxxxxxxxx, ESC-xxxxxxxxx, S-xxx" />
+        </div>
+        <div class="form-field">
+          <label>Priority</label>
+          <select id="amPriority">
+            <option value="high">🔴 High — Needs same day</option>
+            <option value="medium" selected>🟡 Medium — Within 24hrs</option>
+            <option value="low">🟢 Low — Within 48hrs</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Details / Justification</label>
+        <textarea id="amDetails" placeholder="Provide full context. What does the customer need? Why does this require AM approval?"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('newAmApproval')">Cancel</button>
+      <button class="btn btn-accent" onclick="submitAmApproval()" style="background:linear-gradient(135deg,#8b2fc9,#b060ff);">✍️ Submit for AM Approval</button>
+    </div>
+  </div>
+</div>
+
+<!-- Supervisor Review Credit Modal -->
+<div class="modal-overlay" id="modal-reviewCredit">
+  <div class="modal" style="width:520px;">
+    <div class="modal-header">
+      <span class="modal-title">💲 Review Credit Request</span>
+      <button class="modal-close" onclick="closeModal('reviewCredit')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="reviewCreditBody"></div>
+      <div class="form-field" style="margin-top:16px;">
+        <label>Supervisor Notes (optional)</label>
+        <textarea id="reviewCreditNotes" placeholder="Add any notes or reason for approval/denial..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('reviewCredit')">Cancel</button>
+      <button class="btn btn-danger" onclick="resolveCredit('denied')">❌ Deny</button>
+      <button class="btn btn-accent" onclick="resolveCredit('sf-pending')" style="background:linear-gradient(135deg,#0078d4,#50b3f0);">☁️ Approve → SF Pending</button>
+      <button class="btn btn-accent" onclick="resolveCredit('approved')" style="background:linear-gradient(135deg,#107c10,#50c050);">✅ Approve</button>
+    </div>
+  </div>
+</div>
+
+<!-- Supervisor Review AM Approval Modal -->
+<div class="modal-overlay" id="modal-reviewAm">
+  <div class="modal" style="width:520px;">
+    <div class="modal-header">
+      <span class="modal-title">✍️ Review AM Approval Request</span>
+      <button class="modal-close" onclick="closeModal('reviewAm')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="reviewAmBody"></div>
+      <div class="form-field" style="margin-top:16px;">
+        <label>AM Notes / Decision Notes</label>
+        <textarea id="reviewAmNotes" placeholder="Add decision notes or conditions for approval..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('reviewAm')">Cancel</button>
+      <button class="btn btn-danger" onclick="resolveAm('denied')">❌ Deny</button>
+      <button class="btn btn-accent" onclick="resolveAm('sf-pending')" style="background:linear-gradient(135deg,#0078d4,#50b3f0);">☁️ Approve → SF Pending</button>
+      <button class="btn btn-accent" onclick="resolveAm('approved')" style="background:linear-gradient(135deg,#107c10,#50c050);">✅ Approve</button>
     </div>
   </div>
 </div>
