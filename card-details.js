@@ -199,7 +199,6 @@ const cardDetailData = {
       { metric: 'Improvement', value: '+0.3' },
     ]
   },
-,
 
   // Code Red Page Stats
   'activeCodeReds': {
